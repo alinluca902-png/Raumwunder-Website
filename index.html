@@ -1725,30 +1725,6 @@ if (!prefersReduced) {
     }
   });
 
-  // Animate each panel's content as it scrolls into view
-  if (!prefersReduced) {
-    panels.forEach((panel) => {
-      const num     = panel.querySelector('.proc-num');
-      const title   = panel.querySelector('.proc-title');
-      const desc    = panel.querySelector('.proc-desc');
-      const details = [...panel.querySelectorAll('.proc-detail')];
-      const els     = [num, title, desc, ...details].filter(Boolean);
-
-      gsap.set(els, { opacity: 0, y: 24 });
-      gsap.to(els, {
-        opacity: 1, y: 0,
-        duration: 0.7,
-        stagger: 0.08,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: panel,
-          containerAnimation: trackAnim,
-          start: 'left 80%',
-          toggleActions: 'play none none reverse',
-        }
-      });
-    });
-  }
 })();
 
 /* ============================================================
