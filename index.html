@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raumwunder Koslowski – Fugenlose Böden & Bäder Bochum</title>
+  <meta name="description" content="Fugenlose Böden und Bäder in Bochum – seit 2012. Wasserdicht, schimmelfrei, zeitlos. Kostenlose Beratung vor Ort.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========================================================
+       TOKENS
+    ======================================================== */
+    :root {
+      --bg:          oklch(0.10 0.007 62);
+      --surface:     oklch(0.15 0.009 62);
+      --surface-2:   oklch(0.20 0.011 62);
+      --surface-3:   oklch(0.26 0.013 62);
+      --ink:         oklch(0.94 0.005 70);
+      --ink-muted:   oklch(0.58 0.012 68);
+      --ink-subtle:  oklch(0.28 0.009 65);
+      --accent:      oklch(0.75 0.076 80);
+      --accent-hi:   oklch(0.83 0.072 80);
+      --accent-dim:  oklch(0.48 0.055 80);
+      --font-d:      'Cormorant Garamond', Georgia, serif;
+      --font-b:      'Inter', system-ui, sans-serif;
+      --ease-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+      --z-nav:       100;
+      --z-mobile:    200;
+    }
+
+    /* ========================================================
+       RESET
+    ======================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; } /* Lenis handles smooth scroll */
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-b);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, select, textarea { font-family: inherit; }
+
+    /* Film grain */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: screen;
+    }
+
+    /* ========================================================
+       TYPOGRAPHY
+    ======================================================== */
+    .fd-xl  { font-family: var(--font-d); font-weight: 300; font-size: clamp(3.8rem, 9vw, 6rem); line-height: 0.90; letter-spacing: -0.025em; }
+    .fd-lg  { font-family: var(--font-d); font-weight: 300; font-size: clamp(2.6rem, 5.5vw, 4rem); line-height: 1.00; letter-spacing: -0.02em; }
+    .fd-md  { font-family: var(--font-d); font-weight: 300; font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.10; letter-spacing: -0.015em; }
+    .fd-sm  { font-family: var(--font-d); font-weight: 400; font-size: clamp(1.3rem, 2.5vw, 1.75rem); line-height: 1.20; letter-spacing: -0.01em; }
+    em      { color: var(--accent); font-style: italic; }
+
+    /* ========================================================
+       LAYOUT
+    ======================================================== */
+    .c  { width: min(1200px, 100% - 3rem); margin-inline: auto; }
+    .cw { width: min(1440px, 100% - 0px); margin-inline: auto; }
+
+    /* ========================================================
+       COMPONENTS
+    ======================================================== */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.22s, color 0.22s, border-color 0.22s;
+      cursor: pointer; white-space: nowrap;
+      will-change: transform;
+    }
+    .btn-primary { background: var(--accent); color: oklch(0.09 0.005 62); }
+    .btn-primary:hover { background: var(--accent-hi); }
+    .btn-ghost   { background: transparent; color: var(--ink); border: 1px solid var(--ink-subtle); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Magnetic button wrapper */
+    .magnetic-wrap { display: inline-block; }
+    .magnetic-wrap .btn { transition: background 0.22s, color 0.22s, border-color 0.22s; }
+
+    /* ========================================================
+       NAV
+    ======================================================== */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav);
+      padding: 1.5rem 0;
+      transition: padding 0.4s var(--ease-expo), background 0.4s, border-color 0.4s,
+                  transform 0.55s var(--ease-expo), opacity 0.55s var(--ease-expo);
+      border-bottom: 1px solid transparent;
+    }
+    .nav.scrolled {
+      background: oklch(0.10 0.007 62 / 0.90);
+      backdrop-filter: blur(24px) saturate(1.5);
+      -webkit-backdrop-filter: blur(24px) saturate(1.5);
+      padding: 0.85rem 0;
+      border-bottom-color: oklch(0.28 0.009 65 / 0.6);
+    }
+    .nav.nav--hidden {
+      transform: translateY(-110%);
+      opacity: 0;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { line-height: 1; }
+    .nav-logo-name { font-family: var(--font-d); font-size: 1.45rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; }
+    .nav-logo-sub  { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); margin-top: 2px; display: block; }
+    .nav-links { display: flex; align-items: center; gap: 2.25rem; list-style: none; }
+    .nav-links a { font-size: 0.7rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--ink-muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { padding: 0.6rem 1.4rem; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.11em; text-transform: uppercase; background: var(--accent); color: oklch(0.09 0.005 62); border-radius: 2px; transition: background 0.22s, transform 0.22s; }
+    .nav-cta:hover { background: var(--accent-hi); }
+    .nav-burger { display: none; flex-direction: column; gap: 5px; padding: 5px; cursor: pointer; }
+    .nav-burger span { display: block; width: 22px; height: 1.5px; background: var(--ink); border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
+
+    /* ========================================================
+       MOBILE MENU
+    ======================================================== */
+    .mob-menu {
+      position: fixed; inset: 0; background: var(--bg);
+      z-index: var(--z-mobile); flex-direction: column; justify-content: center;
+      align-items: flex-start; padding: 4rem 2rem; gap: 0;
+      display: flex;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(100%);
+      transition: opacity 0.4s var(--ease-expo), transform 0.45s var(--ease-expo);
+    }
+    .mob-menu.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+    .mob-close { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.2rem; color: var(--ink-muted); cursor: pointer; padding: 0.5rem; transition: color 0.2s; }
+    .mob-close:hover { color: var(--ink); }
+    .mob-link {
+      font-family: var(--font-d); font-size: 2.8rem; font-weight: 300; letter-spacing: -0.015em;
+      color: var(--ink); border-bottom: 1px solid var(--ink-subtle); width: 100%; padding: 0.5rem 0;
+      display: block; transition: color 0.2s, padding-left 0.3s;
+      opacity: 0; transform: translateX(24px);
+      transition: color 0.2s, opacity 0.35s var(--ease-expo), transform 0.35s var(--ease-expo);
+    }
+    .mob-menu.open .mob-link { opacity: 1; transform: translateX(0); }
+    .mob-menu.open .mob-link:nth-child(2) { transition-delay: 0.08s; }
+    .mob-menu.open .mob-link:nth-child(3) { transition-delay: 0.14s; }
+    .mob-menu.open .mob-link:nth-child(4) { transition-delay: 0.20s; }
+    .mob-menu.open .mob-link:nth-child(5) { transition-delay: 0.26s; }
+    .mob-menu.open .mob-link:nth-child(6) { transition-delay: 0.32s; }
+    .mob-link:hover { color: var(--accent); }
+    .mob-cta { margin-top: 2.5rem; opacity: 0; transform: translateY(12px); transition: opacity 0.35s var(--ease-expo), transform 0.35s var(--ease-expo), background 0.22s; }
+    .mob-menu.open .mob-cta { opacity: 1; transform: translateY(0); transition-delay: 0.38s; }
+
+    /* ========================================================
+       HERO
+    ======================================================== */
+    .hero {
+      position: relative; height: 100svh; overflow: hidden;
+      display: flex; align-items: flex-end;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; will-change: transform;
+    }
+    .hero-bg img {
+      width: 100%; height: 115%; object-fit: cover; object-position: center;
+      display: block;
+    }
+    .hero-vignette {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to top, var(--bg) 0%, oklch(0.10 0.007 62 / 0.5) 40%, transparent 70%),
+        linear-gradient(to right, var(--bg) 0%, oklch(0.10 0.007 62 / 0.3) 50%, transparent 80%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 0 5rem; width: 100%;
+    }
+    .hero-meta {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      color: var(--accent); margin-bottom: 2rem;
+      font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .hero-meta::before { content: ''; width: 36px; height: 1px; background: var(--accent); flex-shrink: 0; }
+    .hero-h1 { margin-bottom: 2rem; }
+    .hero-h1-wrap { overflow: hidden; display: block; }
+    .hero-h1-wrap span, .hero-h1-wrap em {
+      display: block;
+      font-family: var(--font-d); font-weight: 300;
+      font-size: clamp(3.8rem, 9vw, 5.8rem);
+      line-height: 0.90; letter-spacing: -0.025em;
+    }
+    .hero-sub {
+      color: var(--ink-muted); font-size: 1rem; line-height: 1.75;
+      max-width: 44ch; margin-bottom: 2.5rem;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    /* Trust badges */
+    .hero-trust {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-top: 2rem; flex-wrap: wrap;
+    }
+    .trust-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-muted);
+      border: 1px solid var(--ink-subtle);
+      padding: 0.35rem 0.75rem; border-radius: 2px;
+      white-space: nowrap;
+    }
+    .trust-badge svg { color: var(--accent); flex-shrink: 0; }
+    .trust-stars { color: var(--accent); font-size: 0.7rem; letter-spacing: 0.05em; }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; right: 4rem; z-index: 3;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    }
+    .hero-scroll-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-muted); writing-mode: vertical-lr; transform: rotate(180deg); }
+    .hero-scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, transparent, var(--accent)); }
+
+    /* ========================================================
+       MARQUEE
+    ======================================================== */
+    .marquee-strip {
+      border-top: 1px solid var(--ink-subtle);
+      border-bottom: 1px solid var(--ink-subtle);
+      overflow: hidden; padding: 1rem 0;
+      background: var(--surface);
+    }
+    .marquee-track {
+      display: flex; gap: 0; white-space: nowrap;
+      animation: marqueeRun 28s linear infinite;
+      width: max-content;
+    }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 2rem;
+      padding: 0 2rem;
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+    .marquee-sep { color: var(--accent); font-size: 1rem; }
+    @keyframes marqueeRun {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ========================================================
+       SERVICES SHOWCASE (sticky scroll through 3 panels)
+    ======================================================== */
+    .services-section {
+      height: 300vh; /* 3 panels × 100vh */
+      position: relative;
+    }
+    .services-sticky {
+      position: sticky; top: 0; height: 100vh; overflow: hidden;
+    }
+    /* Background images layer */
+    .svc-images { position: absolute; inset: 0; }
+    .svc-img {
+      position: absolute; inset: 0; opacity: 0;
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .svc-img.active { opacity: 1; }
+    .svc-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+    /* Gradient overlay */
+    .svc-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        105deg,
+        var(--bg) 0%,
+        oklch(0.10 0.007 62 / 0.75) 40%,
+        oklch(0.10 0.007 62 / 0.15) 75%,
+        transparent 100%
+      );
+    }
+    /* Content */
+    .svc-content-wrap {
+      position: relative; z-index: 10; height: 100%;
+      display: flex; align-items: center;
+      padding: 0;
+    }
+    .svc-panel {
+      position: absolute;
+      max-width: 560px;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s var(--ease-expo), transform 0.6s var(--ease-expo);
+      pointer-events: none;
+    }
+    .svc-panel.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .svc-kicker {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.5rem;
+    }
+    .svc-kicker::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
+    .svc-title { font-family: var(--font-d); font-weight: 300; font-size: clamp(2.8rem, 6vw, 4.5rem); line-height: 0.95; letter-spacing: -0.025em; margin-bottom: 1.5rem; }
+    .svc-desc { color: var(--ink-muted); font-size: 1rem; line-height: 1.75; max-width: 44ch; margin-bottom: 2rem; }
+    .svc-features { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2.5rem; }
+    .svc-features li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; color: var(--ink-muted); }
+    .svc-features li::before { content: ''; width: 6px; height: 1px; background: var(--accent); flex-shrink: 0; }
+    /* Side navigation dots */
+    .svc-nav {
+      position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
+      z-index: 20; display: flex; flex-direction: column; gap: 1rem; align-items: center;
+    }
+    .svc-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--ink-subtle);
+      transition: background 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .svc-dot:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+    .svc-dot.active { background: var(--accent); transform: scale(1.4); }
+    /* Progress bar */
+    .svc-progress {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--ink-subtle); z-index: 20;
+    }
+    .svc-progress-fill {
+      height: 100%; background: var(--accent); width: 33.33%;
+      transition: width 0.5s var(--ease-expo);
+    }
+    /* Scroll hint */
+    .svc-scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 20; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--ink-subtle); display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      transition: opacity 0.5s;
+    }
+    .svc-scroll-hint-line { width: 1px; height: 30px; background: linear-gradient(to bottom, var(--ink-subtle), transparent); animation: scrollPulse 1.5s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+    /* Panel number */
+    .svc-panel-num {
+      position: absolute; right: 3rem; bottom: 3.5rem; z-index: 20;
+      font-family: var(--font-d); font-size: 5rem; font-weight: 300;
+      color: oklch(0.22 0.010 62); letter-spacing: -0.04em; line-height: 1;
+      user-select: none;
+      transition: opacity 0.4s;
+    }
+
+    /* ========================================================
+       TEXT SCRUB
+    ======================================================== */
+    .text-scrub { padding: 12rem 0; background: var(--bg); }
+    .scrub-text {
+      font-family: var(--font-d); font-weight: 300;
+      font-size: clamp(2rem, 5.5vw, 4.5rem);
+      line-height: 1.2; letter-spacing: -0.02em;
+      max-width: 18ch;
+    }
+    .scrub-text .w { display: inline; opacity: 0.1; }
+
+    /* ========================================================
+       STATS
+    ======================================================== */
+    .stats-section {
+      border-top: 1px solid var(--ink-subtle);
+      border-bottom: 1px solid var(--ink-subtle);
+      background: var(--surface);
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .stat {
+      padding: 2.5rem 2rem; text-align: center;
+      position: relative;
+    }
+    .stat + .stat::before {
+      content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+      height: 40px; width: 1px; background: var(--ink-subtle);
+    }
+    .stat-num { font-family: var(--font-d); font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1; letter-spacing: -0.02em; color: var(--accent); }
+    .stat-label { font-size: 0.7rem; letter-spacing: 0.08em; color: var(--ink-muted); margin-top: 0.4rem; }
+
+    /* ========================================================
+       BENEFITS
+    ======================================================== */
+    .benefits-section { padding: 8rem 0; background: var(--bg); }
+    .benefits-header { margin-bottom: 5rem; }
+    .benefits-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .benefit {
+      padding: 2.75rem 3rem;
+      border-top: 1px solid var(--ink-subtle);
+      display: grid; grid-template-columns: 44px 1fr; gap: 1.5rem; align-items: start;
+      transition: background 0.25s;
+    }
+    .benefit:hover { background: var(--surface); }
+    .benefit:nth-child(odd) { border-right: 1px solid var(--ink-subtle); }
+    .benefit-icon { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
+    .benefit-title { font-family: var(--font-d); font-size: 1.25rem; font-weight: 400; margin-bottom: 0.4rem; line-height: 1.2; }
+    .benefit-desc { font-size: 0.875rem; color: var(--ink-muted); line-height: 1.65; }
+
+    /* ========================================================
+       PROCESS (horizontal scroll)
+    ======================================================== */
+    .process-section { background: var(--surface); }
+    .process-header { padding: 6rem 0 4rem; }
+    .process-wrapper { overflow: hidden; }
+    .process-track {
+      display: flex; width: max-content;
+      will-change: transform;
+    }
+    .process-panel {
+      width: 100vw; min-height: 70vh;
+      flex-shrink: 0;
+      display: grid; grid-template-columns: 1fr 1fr; align-items: center;
+      padding: 0 min(5rem, 4vw) 6rem;
+      gap: 5rem;
+      border-top: 1px solid var(--ink-subtle);
+    }
+    .process-panel-left {}
+    .proc-num { font-family: var(--font-d); font-size: 6rem; font-weight: 300; color: var(--ink-subtle); line-height: 1; letter-spacing: -0.03em; display: block; margin-bottom: 1.5rem; }
+    .proc-title { font-family: var(--font-d); font-weight: 400; font-size: clamp(1.5rem, 3vw, 2.2rem); margin-bottom: 1rem; line-height: 1.15; }
+    .proc-desc { font-size: 0.9375rem; color: var(--ink-muted); line-height: 1.75; max-width: 40ch; }
+    .process-panel-right { display: flex; flex-direction: column; gap: 1rem; padding-top: 1rem; }
+    .proc-detail {
+      padding: 1.5rem; background: var(--surface-2);
+      border-radius: 2px; transition: background 0.2s;
+      cursor: default;
+    }
+    .proc-detail:hover { background: var(--surface-3); }
+    .proc-detail-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+    .proc-detail-text { font-size: 0.875rem; color: var(--ink-muted); line-height: 1.6; }
+    /* Process progress */
+    .process-prog {
+      height: 2px; background: var(--ink-subtle);
+      position: relative; overflow: hidden;
+    }
+    .process-prog-fill { height: 100%; background: var(--accent); width: 0; transition: width 0.2s linear; }
+
+    /* ========================================================
+       GALLERY
+    ======================================================== */
+    .gallery-section { padding: 8rem 0; overflow: hidden; }
+    .gallery-header { margin-bottom: 3rem; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      grid-template-rows: 340px 280px;
+      gap: 4px;
+    }
+    .g-item { overflow: hidden; background: var(--surface-2); position: relative; cursor: zoom-in; }
+    .g-item img { width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform; transition: transform 0.6s var(--ease-expo); }
+    .g-item:hover img { transform: scale(1.04); }
+    .g-item--tall { grid-row: 1 / 3; }
+    /* Gallery hover overlay */
+    .g-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, oklch(0.10 0.007 62 / 0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .g-item:hover::after { opacity: 1; }
+    .g-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1.25rem 1.25rem;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: opacity 0.4s, transform 0.4s var(--ease-expo);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .g-item:hover .g-overlay { opacity: 1; transform: translateY(0); }
+    .g-overlay-label {
+      font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.2rem;
+    }
+    .g-overlay-title {
+      font-family: var(--font-d); font-size: 1.1rem; font-weight: 300; color: var(--ink); line-height: 1.2;
+    }
+
+    /* ========================================================
+       TESTIMONIALS
+    ======================================================== */
+    .testimonials-section { padding: 9rem 0; }
+    .section-label {
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .section-label::before { content: ''; width: 28px; height: 1px; background: var(--accent); }
+    .testi-headline { margin-bottom: 4rem; }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+    }
+    .testi-card {
+      background: var(--surface);
+      padding: 2.5rem;
+      border: 1px solid var(--ink-subtle);
+      display: flex; flex-direction: column; gap: 1.5rem;
+      transition: border-color 0.3s, background 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .testi-card::before {
+      content: '\201C';
+      position: absolute; top: 1rem; right: 1.5rem;
+      font-family: var(--font-d); font-size: 8rem; line-height: 1;
+      color: var(--ink-subtle); opacity: 0.3; pointer-events: none;
+    }
+    .testi-card:hover { border-color: oklch(0.75 0.076 80 / 0.4); background: var(--surface-2); }
+    .testi-card--accent { border-color: oklch(0.75 0.076 80 / 0.25); background: oklch(0.13 0.01 70); }
+    .testi-stars { color: var(--accent); font-size: 0.85rem; letter-spacing: 0.1em; }
+    .testi-quote {
+      font-family: var(--font-d); font-size: 1.2rem; font-weight: 300;
+      line-height: 1.6; color: var(--ink); flex: 1;
+      border: none; margin: 0; padding: 0;
+    }
+    .testi-author { display: flex; align-items: center; gap: 1rem; margin-top: auto; }
+    .testi-initials {
+      width: 42px; height: 42px; flex-shrink: 0;
+      background: var(--accent-dim); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em;
+      color: oklch(0.09 0.005 62);
+    }
+    .testi-name { font-size: 0.85rem; font-weight: 500; margin-bottom: 0.2rem; }
+    .testi-loc  { font-size: 0.7rem; color: var(--ink-muted); letter-spacing: 0.04em; }
+    @media (max-width: 900px) {
+      .testi-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ========================================================
+       CTA BAND
+    ======================================================== */
+    .cta-section {
+      background: var(--surface); padding: 8rem 0;
+      border-top: 1px solid var(--ink-subtle);
+      border-bottom: 1px solid var(--ink-subtle);
+      overflow: hidden; position: relative;
+    }
+    /* Ambient glow */
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, oklch(0.75 0.076 80 / 0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-inner { text-align: center; position: relative; z-index: 1; }
+    .cta-heading { font-family: var(--font-d); font-weight: 300; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+    .cta-sub { color: var(--ink-muted); max-width: 50ch; margin: 0 auto 2.5rem; font-size: 1rem; line-height: 1.75; }
+    .cta-btns { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    /* ========================================================
+       CONTACT
+    ======================================================== */
+    .contact-section { padding: 8rem 0; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 6rem; align-items: start; }
+    .contact-sidebar {}
+    .ci-item { display: flex; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--ink-subtle); }
+    .ci-item:first-of-type { border-top: 1px solid var(--ink-subtle); }
+    .ci-icon { width: 18px; flex-shrink: 0; color: var(--accent); margin-top: 3px; }
+    .ci-label { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.2rem; }
+    .ci-val { font-size: 1rem; }
+    .ci-val a:hover { color: var(--accent); }
+    .contact-social { display: flex; gap: 0.75rem; margin-top: 2rem; }
+    .soc-a { width: 38px; height: 38px; border: 1px solid var(--ink-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--ink-muted); transition: border-color 0.2s, color 0.2s; }
+    .soc-a:hover { border-color: var(--accent); color: var(--accent); }
+    /* Form */
+    .fg { margin-bottom: 1.25rem; }
+    .fl { display: block; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.5rem; }
+    .fc { width: 100%; background: var(--surface); border: 1px solid var(--ink-subtle); color: var(--ink); font-size: 0.9375rem; padding: 0.875rem 1rem; border-radius: 3px; transition: border-color 0.2s; appearance: none; }
+    .fc:focus { outline: none; border-color: var(--accent); }
+    .fc:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .fc::placeholder { color: var(--ink-subtle); }
+    textarea.fc { resize: vertical; min-height: 110px; }
+    select.fc { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+    select.fc option { background: var(--surface); }
+    .fr { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-submit { width: 100%; padding: 1rem; background: var(--accent); color: oklch(0.09 0.005 62); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border: none; border-radius: 3px; cursor: pointer; transition: background 0.22s, transform 0.22s var(--ease-expo); margin-top: 0.5rem; }
+    .form-submit:hover { background: var(--accent-hi); }
+    .form-submit:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 3px; }
+    .form-note { font-size: 0.72rem; color: var(--ink-subtle); text-align: center; margin-top: 0.75rem; }
+    .wa-btn { display: flex; align-items: center; justify-content: center; gap: 0.6rem; width: 100%; padding: 0.875rem; background: transparent; border: 1px solid oklch(0.50 0.15 145); color: oklch(0.72 0.15 145); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; border-radius: 3px; cursor: pointer; transition: background 0.22s; margin-top: 0.75rem; text-decoration: none; }
+    .wa-btn:hover { background: oklch(0.50 0.15 145 / 0.08); }
+
+    /* ========================================================
+       FOOTER
+    ======================================================== */
+    .footer { border-top: 1px solid var(--ink-subtle); padding: 2.5rem 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .footer-brand-name { font-family: var(--font-d); font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    .footer-copy { font-size: 0.68rem; color: var(--ink-muted); margin-top: 0.2rem; }
+    .footer-links { display: flex; gap: 2rem; list-style: none; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--ink); }
+    .footer-social { display: flex; gap: 0.75rem; }
+
+    /* ========================================================
+       FLOATING WHATSAPP BUTTON
+    ======================================================== */
+    .wa-float {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 9990;
+      display: flex; align-items: center; gap: 0.65rem;
+      background: oklch(0.38 0.15 145); color: #fff;
+      padding: 0.75rem 1.25rem 0.75rem 0.9rem;
+      border-radius: 50px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;
+      text-decoration: none;
+      box-shadow: 0 4px 24px oklch(0.38 0.15 145 / 0.4), 0 1px 4px oklch(0 0 0 / 0.3);
+      transition: background 0.22s, transform 0.22s, box-shadow 0.22s, opacity 0.4s, translate 0.5s;
+      opacity: 0;
+      translate: 0 20px;
+      pointer-events: none;
+    }
+    .wa-float.visible {
+      opacity: 1;
+      translate: 0 0;
+      pointer-events: auto;
+    }
+    .wa-float:hover {
+      background: oklch(0.44 0.15 145);
+      box-shadow: 0 8px 32px oklch(0.38 0.15 145 / 0.5), 0 1px 4px oklch(0 0 0 / 0.3);
+    }
+    .wa-float svg { flex-shrink: 0; }
+    /* Hide label on very small screens */
+    @media (max-width: 400px) {
+      .wa-float span { display: none; }
+      .wa-float { padding: 0.75rem; border-radius: 50%; }
+    }
+
+    /* ========================================================
+       REDUCED MOTION
+    ======================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      .marquee-track { animation: none; }
+      .svc-img, .svc-panel { transition: none; }
+      .hero-scroll-line { animation: none; }
+      .svc-scroll-hint-line { animation: none; }
+    }
+
+    /* ========================================================
+       RESPONSIVE
+    ======================================================== */
+    @media (max-width: 1100px) {
+      .contact-grid { grid-template-columns: 1fr 1.1fr; gap: 4rem; }
+      .process-panel { padding: 0 3rem 5rem; gap: 3rem; }
+    }
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-burger { display: flex; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat + .stat::before { display: none; }
+      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--ink-subtle); }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .benefit:nth-child(odd) { border-right: none; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 260px 260px; }
+      .g-item--tall { grid-row: auto; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-inner { justify-content: center; text-align: center; }
+      .footer-links { justify-content: center; }
+      .footer-social { justify-content: center; }
+    }
+    @media (max-width: 640px) {
+      .hero-content { padding-bottom: 4rem; }
+      .hero-scroll { right: 1.5rem; }
+      .text-scrub { padding: 7rem 0; }
+      .benefits-section { padding: 5rem 0; }
+      .gallery-section { padding: 5rem 0; }
+      .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .g-item { aspect-ratio: 4/3; }
+      .contact-section { padding: 5rem 0; }
+      .fr { grid-template-columns: 1fr; }
+      .cta-btns { flex-direction: column; align-items: center; }
+      .process-panel { grid-template-columns: 1fr; min-height: auto; padding: 3rem 1.5rem; gap: 2rem; }
+      .process-panel-right { display: none; }
+      .svc-nav { right: 1rem; }
+      .svc-panel-num { right: 1rem; }
+      .benefit { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAV
+============================================================= -->
+<nav class="nav" id="nav">
+  <div class="c">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="nav-logo-name">Raumwunder</span>
+        <span class="nav-logo-sub">Koslowski &middot; Bochum &middot; Seit 2012</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#leistungen">Leistungen</a></li>
+        <li><a href="#vorteile">Vorteile</a></li>
+        <li><a href="#prozess">Prozess</a></li>
+        <li><a href="#galerie">Galerie</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+      <a href="#kontakt" class="nav-cta">Beratung anfragen</a>
+      <button class="nav-burger" id="burger" aria-label="Menü">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mob-menu" id="mobMenu">
+  <button class="mob-close" id="mobClose">✕</button>
+  <a href="#leistungen" class="mob-link">Leistungen</a>
+  <a href="#vorteile"   class="mob-link">Vorteile</a>
+  <a href="#prozess"    class="mob-link">Prozess</a>
+  <a href="#galerie"    class="mob-link">Galerie</a>
+  <a href="#kontakt"    class="mob-link">Kontakt</a>
+  <a href="#kontakt" class="btn btn-primary mob-cta">Kostenlose Beratung</a>
+</div>
+
+
+<!-- ============================================================
+     HERO
+============================================================= -->
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg">
+    <img
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_34A4OwOhy3UnWcFcPQP3mPsraBZ/hf_20260626_125212_8bcf970e-ac01-4892-99be-148d0803d457.png"
+      alt="Fugenloses Premium-Badezimmer – KI-generiert"
+      id="heroImg"
+      fetchpriority="high"
+    >
+  </div>
+  <div class="hero-vignette"></div>
+
+  <div class="hero-content c">
+    <div class="hero-meta" id="heroMeta">Bochum &amp; NRW &nbsp;&middot;&nbsp; Seit 2012</div>
+
+    <h1 class="hero-h1" id="heroH1">
+      <div class="hero-h1-wrap"><span>Fugenlose</span></div>
+      <div class="hero-h1-wrap"><em>Böden &amp;</em></div>
+      <div class="hero-h1-wrap"><span>Bäder.</span></div>
+    </h1>
+
+    <p class="hero-sub" id="heroSub">
+      Wo Räume grenzenlos werden. Wir erschaffen nahtlose Oberflächen
+      mit italienischen Premium-Materialien &mdash; wasserdicht,
+      schimmelfrei und zeitlos schön.
+    </p>
+
+    <div class="hero-actions" id="heroActions">
+      <a href="#kontakt" class="btn btn-primary">Kostenlose Beratung</a>
+      <a href="#leistungen" class="btn btn-ghost">Leistungen &darr;</a>
+    </div>
+
+    <div class="hero-trust" id="heroTrust">
+      <div class="trust-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span class="trust-stars">★★★★★</span>
+        <span>5,0 Google</span>
+      </div>
+      <div class="trust-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        DIN&nbsp;18534
+      </div>
+      <div class="trust-badge">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Seit 2012
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" id="heroScroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-label">Scroll</span>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     MARQUEE
+============================================================= -->
+<div class="marquee-strip">
+  <div class="marquee-track" aria-hidden="true">
+    <!-- Duplicated for seamless loop -->
+    <span class="marquee-item">FUGENLOS <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">WASSERDICHT <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">SCHIMMELFREI <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">DIN 18534 <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">SEIT 2012 <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">BOCHUM <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">PFLEGELEICHT <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">KRATZFEST <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">FUGENLOS <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">WASSERDICHT <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">SCHIMMELFREI <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">DIN 18534 <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">SEIT 2012 <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">BOCHUM <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">PFLEGELEICHT <span class="marquee-sep">·</span></span>
+    <span class="marquee-item">KRATZFEST <span class="marquee-sep">·</span></span>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     SERVICES SHOWCASE (sticky)
+============================================================= -->
+<section class="services-section" id="leistungen">
+  <div class="services-sticky">
+
+    <!-- Background images -->
+    <div class="svc-images">
+      <div class="svc-img active" id="svcImg0">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_34A4OwOhy3UnWcFcPQP3mPsraBZ/hf_20260626_125215_523efca2-4ebc-4716-8be7-a651fe34823d.jpeg" alt="Fugenloses Bad – KI-generiert" loading="lazy">
+      </div>
+      <div class="svc-img" id="svcImg1">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_34A4OwOhy3UnWcFcPQP3mPsraBZ/hf_20260626_125216_2298d748-1e65-4ea5-9ae5-38169f44b576.jpeg" alt="Fugenloser Boden Wohnraum – KI-generiert" loading="lazy">
+      </div>
+      <div class="svc-img" id="svcImg2">
+        <img src="https://koslowski-raumwunder.de/wp-content/uploads/go-x/u/4b9268a8-8750-4345-9f75-a98db5c290c6/l0,t0,w1024,h1024/image-768x768.jpg" alt="Gewerbeflächen" loading="lazy">
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="svc-overlay"></div>
+
+    <!-- Content panels -->
+    <div class="svc-content-wrap c">
+      <!-- Panel 0: Bäder -->
+      <div class="svc-panel active" id="svcPanel0">
+        <div class="svc-kicker">01 &nbsp;·&nbsp; Premium-Spezialität</div>
+        <h2 class="svc-title">Fugenlose<br><em>Bäder</em></h2>
+        <p class="svc-desc">
+          Komplettlösung aus einer Hand: Fachgerechte Abdichtung nach
+          DIN&nbsp;18534, nahtlose Wände, Boden und Dusche &mdash;
+          schimmelfrei für Jahrzehnte.
+        </p>
+        <ul class="svc-features">
+          <li>Abdichtung nach DIN 18534 zertifiziert</li>
+          <li>Wände, Boden &amp; Dusche nahtlos integriert</li>
+          <li>Typisches Bad in 4–5 Tagen fertig</li>
+          <li>100% wasserdicht &amp; schimmelfrei</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-primary">Beratung anfragen</a>
+      </div>
+
+      <!-- Panel 1: Böden -->
+      <div class="svc-panel" id="svcPanel1">
+        <div class="svc-kicker">02 &nbsp;·&nbsp; Wohn &amp; Gewerbe</div>
+        <h2 class="svc-title">Fugenlose<br><em>Böden</em></h2>
+        <p class="svc-desc">
+          Lavastein-basiert, kratzfest, in unzähligen Designs: Beton-Optik,
+          Naturstein-Look, Terrazzo &mdash; für Wohnbereiche, Küchen und
+          Gewerbeflächen.
+        </p>
+        <ul class="svc-features">
+          <li>Härtester Spachtelboden am Markt</li>
+          <li>Direkt über Bestand verlegbar (geringe Aufbauhöhe)</li>
+          <li>Beton, Naturstein, Terrazzo &amp; mehr</li>
+          <li>Extrem pflegeleicht &mdash; einfach abwischen</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-primary">Beratung anfragen</a>
+      </div>
+
+      <!-- Panel 2: Gewerbe & mehr -->
+      <div class="svc-panel" id="svcPanel2">
+        <div class="svc-kicker">03 &nbsp;·&nbsp; Gewerbe &amp; Sonderlösungen</div>
+        <h2 class="svc-title">Gewerbe &amp;<br><em>Sonderflächen</em></h2>
+        <p class="svc-desc">
+          Fugenlose Böden für Hotels, Gastronomie, Wellness &amp; Spa,
+          Arztpraxen und Büros. Hochbelastbar, hygienisch und
+          chlorwasserresistent auf Wunsch.
+        </p>
+        <ul class="svc-features">
+          <li>Hotels &amp; Gastronomie</li>
+          <li>Wellness &amp; Spa (chlorresistent)</li>
+          <li>Arztpraxen, Kanzleien, Showrooms</li>
+          <li>Schnelle Verlegung – minimale Betriebsunterbrechung</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-primary">Anfrage senden</a>
+      </div>
+    </div>
+
+    <!-- Dot navigation -->
+    <div class="svc-nav" id="svcNav" role="tablist" aria-label="Leistungen Navigation">
+      <div class="svc-dot active" data-svc="0" role="tab" tabindex="0" aria-label="Fugenlose Bäder" aria-selected="true"></div>
+      <div class="svc-dot"        data-svc="1" role="tab" tabindex="0" aria-label="Fugenlose Böden" aria-selected="false"></div>
+      <div class="svc-dot"        data-svc="2" role="tab" tabindex="0" aria-label="Gewerbe & Sonderflächen" aria-selected="false"></div>
+    </div>
+
+    <!-- Panel number (decorative) -->
+    <div class="svc-panel-num" id="svcPanelNum">01</div>
+
+    <!-- Progress bar -->
+    <div class="svc-progress">
+      <div class="svc-progress-fill" id="svcProgressFill"></div>
+    </div>
+
+    <!-- Scroll hint -->
+    <div class="svc-scroll-hint" id="svcScrollHint">
+      <div class="svc-scroll-hint-line"></div>
+      <span>Scroll</span>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     TEXT SCRUB
+============================================================= -->
+<section class="text-scrub" id="textScrub">
+  <div class="c">
+    <p class="scrub-text" id="scrubText">Mehr als ein Boden. Eine Philosophie. Wir erschaffen seit 2012 Räume die grenzenlos sind.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     STATS
+============================================================= -->
+<div class="stats-section">
+  <div class="stats-grid c">
+    <div class="stat">
+      <div class="stat-num"><span class="count-num" data-target="13">0</span>+</div>
+      <div class="stat-label">Jahre Erfahrung</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num"><span class="count-num" data-target="250">0</span>+</div>
+      <div class="stat-label">Zufriedene Kunden</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">48h</div>
+      <div class="stat-label">Angebots-Rückmeldung</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Qualitätsgarantie</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     BENEFITS
+============================================================= -->
+<section class="benefits-section" id="vorteile">
+  <div class="c">
+    <div class="benefits-header">
+      <h2 class="fd-lg">Warum fugenlos?</h2>
+      <p style="color:var(--ink-muted);margin-top:.75rem;max-width:50ch;font-size:1rem;line-height:1.7;">
+        Mehr als nur schön &mdash; hygienisch, langlebig, extrem pflegeleicht.
+      </p>
+    </div>
+    <div class="benefits-grid">
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div><h3 class="benefit-title">100% Schimmelfrei</h3><p class="benefit-desc">Keine Silikonfugen, keine schwarzen Ränder. Hygienisch und dauerhaft gesund für Ihre Familie.</p></div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div><h3 class="benefit-title">Nur 4–5 Tage</h3><p class="benefit-desc">Schnelle Verlegung ohne wochenlange Baustelle. Ein Bad in unter einer Woche fertig.</p></div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div><h3 class="benefit-title">Keine Kernsanierung</h3><p class="benefit-desc">Geringe Aufbauhöhe – direkt über den alten Boden. Spart Zeit, Geld und Dreck.</p></div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div><h3 class="benefit-title">Extrem pflegeleicht</h3><p class="benefit-desc">Einfach abwischen &mdash; fertig. 5 Minuten statt 30. Kein Fugenschrubben mehr.</p></div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <div><h3 class="benefit-title">100% Wasserdicht</h3><p class="benefit-desc">DIN&nbsp;18534 zertifizierte Abdichtung. Garantiert wasserdicht für Jahrzehnte.</p></div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div><h3 class="benefit-title">Räume wirken größer</h3><p class="benefit-desc">Fugenlose Flächen lassen Räume optisch größer wirken. Perfekt für kleine Bäder.</p></div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div><h3 class="benefit-title">Kratzfest &amp; robust</h3><p class="benefit-desc">Härtester Spachtelboden am Markt. Lavastein-basiert für maximale Belastbarkeit.</p></div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+        </div>
+        <div><h3 class="benefit-title">Individuell gestaltbar</h3><p class="benefit-desc">Beton, Naturstein, Terrazzo &mdash; unendliche Farben und Stile. Ihr Design.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     PROCESS (horizontal scroll)
+============================================================= -->
+<section class="process-section" id="prozess">
+  <div class="process-header c">
+    <h2 class="fd-lg">Vom Erstgespräch<br><em>zum fertigen Boden</em></h2>
+    <p style="color:var(--ink-muted);margin-top:.75rem;font-size:1rem;line-height:1.7;max-width:50ch;">
+      So arbeiten wir &mdash; transparent, termingerecht, mit höchster Qualität.
+    </p>
+    <div class="process-prog" id="processProg" style="margin-top:2rem;max-width:300px;">
+      <div class="process-prog-fill" id="processProgFill"></div>
+    </div>
+  </div>
+
+  <div class="process-wrapper" id="processWrapper">
+    <div class="process-track" id="processTrack">
+
+      <div class="process-panel">
+        <div class="process-panel-left">
+          <span class="proc-num">01</span>
+          <h3 class="proc-title">Kostenlose<br>Beratung</h3>
+          <p class="proc-desc">
+            Vor Ort bei Ihnen in Bochum und Umgebung. Wir besichtigen den Raum,
+            besprechen Ihre Wünsche und klären alle Fragen persönlich und unverbindlich.
+          </p>
+        </div>
+        <div class="process-panel-right">
+          <div class="proc-detail">
+            <div class="proc-detail-label">Einsatzgebiet</div>
+            <div class="proc-detail-text">Bochum &amp; ganz NRW – wir kommen zu Ihnen</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Dauer</div>
+            <div class="proc-detail-text">Typisch 30–60 Minuten vor Ort</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Kosten</div>
+            <div class="proc-detail-text">Vollständig kostenlos &amp; unverbindlich</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-panel">
+        <div class="process-panel-left">
+          <span class="proc-num">02</span>
+          <h3 class="proc-title">Material &amp;<br>Muster</h3>
+          <p class="proc-desc">
+            Auswahl aus unserem Sortiment italienischer Premium-Materialien.
+            Farben, Stile und Oberflächenstruktur direkt vergleichen &mdash;
+            wir zeigen Ihnen Muster vor Ort.
+          </p>
+        </div>
+        <div class="process-panel-right">
+          <div class="proc-detail">
+            <div class="proc-detail-label">Materialpartner</div>
+            <div class="proc-detail-text">ArtStucco – Italienische Premium-Systeme</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Stiloptionen</div>
+            <div class="proc-detail-text">Beton-Optik, Naturstein, Terrazzo &amp; mehr</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Angebot</div>
+            <div class="proc-detail-text">Innerhalb 48h nach Erstgespräch</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-panel">
+        <div class="process-panel-left">
+          <span class="proc-num">03</span>
+          <h3 class="proc-title">Professionelle<br>Ausführung</h3>
+          <p class="proc-desc">
+            Termingerechte Verlegung durch unser Fachteam. Sauber,
+            DIN-konform abgedichtet, mit lückenloser Qualitätskontrolle
+            bei jedem einzelnen Arbeitsschritt.
+          </p>
+        </div>
+        <div class="process-panel-right">
+          <div class="proc-detail">
+            <div class="proc-detail-label">Abdichtung</div>
+            <div class="proc-detail-text">Norm-gerecht nach DIN 18534</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Typische Dauer</div>
+            <div class="proc-detail-text">Bad: 4–5 Tage · Böden: je nach m²</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Qualität</div>
+            <div class="proc-detail-text">Fotodokumentation jedes Schritts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="process-panel">
+        <div class="process-panel-left">
+          <span class="proc-num">04</span>
+          <h3 class="proc-title">Nachbetreuung<br>&amp; Garantie</h3>
+          <p class="proc-desc">
+            Pflege-Tipps, langfristige Garantie und persönliche Betreuung.
+            Bei Rückfragen stehen wir Ihnen jederzeit zur Verfügung &mdash;
+            auch Jahre nach dem Abschluss.
+          </p>
+        </div>
+        <div class="process-panel-right">
+          <div class="proc-detail">
+            <div class="proc-detail-label">Garantie</div>
+            <div class="proc-detail-text">Vollständige Garantie auf alle Arbeiten</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Pflege</div>
+            <div class="proc-detail-text">Detaillierte Pflegeanleitung inklusive</div>
+          </div>
+          <div class="proc-detail">
+            <div class="proc-detail-label">Erreichbarkeit</div>
+            <div class="proc-detail-text">Persönlicher Kontakt zu Markus Koslowski</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     GALLERY
+============================================================= -->
+<section class="gallery-section" id="galerie">
+  <div class="c gallery-header">
+    <h2 class="fd-lg">Unsere Arbeiten</h2>
+  </div>
+  <div class="cw">
+    <div class="gallery-grid">
+      <div class="g-item g-item--tall">
+        <img src="https://koslowski-raumwunder.de/wp-content/uploads/go-x/u/136adc48-6d2d-45f8-bb43-c16f2a36db09/l0,t200,w1200,h1200/image-768x768.jpg" alt="Fugenloses Bad LED-Spiegel" loading="lazy">
+        <div class="g-overlay">
+          <div class="g-overlay-label">Bad</div>
+          <div class="g-overlay-title">Premium Badezimmer<br>mit LED-Spiegel</div>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="https://koslowski-raumwunder.de/wp-content/uploads/go-x/u/d68fe2a6-fe36-4e07-b24c-0514050c615b/l0,t0,w850,h850/image-768x768.jpg" alt="Fugenloser Boden Wohnzimmer" loading="lazy">
+        <div class="g-overlay">
+          <div class="g-overlay-label">Wohnraum</div>
+          <div class="g-overlay-title">Fugenloser Boden Beton-Optik</div>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="https://koslowski-raumwunder.de/wp-content/uploads/go-x/u/801ff27e-76e4-4913-816e-a0d5dc18475e/l0,t292,w1888,h1416/image-768x576.jpg" alt="Fugenloses Bad Komplettlösung" loading="lazy">
+        <div class="g-overlay">
+          <div class="g-overlay-label">Komplettlösung</div>
+          <div class="g-overlay-title">Bad von Boden bis Decke</div>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="https://koslowski-raumwunder.de/wp-content/uploads/go-x/u/4b9268a8-8750-4345-9f75-a98db5c290c6/l0,t0,w1024,h1024/image-768x768.jpg" alt="Premium Oberfläche" loading="lazy">
+        <div class="g-overlay">
+          <div class="g-overlay-label">Oberfläche</div>
+          <div class="g-overlay-title">Naturstein-Look</div>
+        </div>
+      </div>
+      <div class="g-item">
+        <img src="https://d8j0ntlcm91z4.cloudfront.net/user_34A4OwOhy3UnWcFcPQP3mPsraBZ/hf_20260626_125213_8bcd0589-6681-4f4d-9bc5-25fc63d1ac3c.jpeg" alt="Fugenloser Betonboden Nahaufnahme" loading="lazy">
+        <div class="g-overlay">
+          <div class="g-overlay-label">Detailansicht</div>
+          <div class="g-overlay-title">Mikrozement Nahaufnahme</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     TESTIMONIALS
+============================================================= -->
+<section class="testimonials-section" id="referenzen">
+  <div class="c">
+    <div class="section-label">Kundenstimmen</div>
+    <h2 class="fd-lg testi-headline">Was unsere<br><em>Kunden sagen</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card" data-testi>
+        <div class="testi-stars">★★★★★</div>
+        <blockquote class="testi-quote">&ldquo;Das Ergebnis hat uns sprachlos gemacht. Der fugenlose Boden verändert den ganzen Raum — kein Schmutz, kein Schimmel, einfach perfekt.&rdquo;</blockquote>
+        <div class="testi-author">
+          <div class="testi-initials">MH</div>
+          <div>
+            <div class="testi-name">M. Hoffmann</div>
+            <div class="testi-loc">Bochum, Privatbad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card testi-card--accent" data-testi>
+        <div class="testi-stars">★★★★★</div>
+        <blockquote class="testi-quote">&ldquo;Markus und sein Team sind absolute Profis. Saubere Arbeit, pünktlich, faire Preise. Das Bad sieht aus wie aus einer Designzeitschrift.&rdquo;</blockquote>
+        <div class="testi-author">
+          <div class="testi-initials">SK</div>
+          <div>
+            <div class="testi-name">S. Krause</div>
+            <div class="testi-loc">Dortmund, Komplettbad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card" data-testi>
+        <div class="testi-stars">★★★★★</div>
+        <blockquote class="testi-quote">&ldquo;Fugenloser Boden im gesamten Erdgeschoss — wir hätten nicht gedacht, dass es so schnell und sauber geht. Empfehle Raumwunder uneingeschränkt.&rdquo;</blockquote>
+        <div class="testi-author">
+          <div class="testi-initials">TW</div>
+          <div>
+            <div class="testi-name">T. Wegner</div>
+            <div class="testi-loc">Essen, Wohnbereich 95 m²</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CTA BAND
+============================================================= -->
+<section class="cta-section" id="cta">
+  <div class="cta-inner c">
+    <h2 class="cta-heading">
+      Bereit für Ihren<br>
+      <em>fugenlosen Raum?</em>
+    </h2>
+    <p class="cta-sub">
+      Kostenlose Beratung vor Ort in Bochum und Umgebung.
+      Wir melden uns innerhalb von 48&nbsp;Stunden.
+    </p>
+    <div class="cta-btns">
+      <a href="#kontakt" class="btn btn-primary">Beratung anfragen</a>
+      <a href="tel:015234259962" class="btn btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 5.75 5.75l1.62-1.62a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        0152 / 34259962
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CONTACT
+============================================================= -->
+<section class="contact-section" id="kontakt">
+  <div class="c">
+    <div class="contact-grid">
+
+      <div>
+        <h2 class="fd-lg" style="margin-bottom:1.5rem;">
+          Jetzt<br><em>Beratung</em><br>anfragen
+        </h2>
+        <p style="color:var(--ink-muted);margin-bottom:2.5rem;max-width:36ch;font-size:.9375rem;line-height:1.75;">
+          Kostenlos, unverbindlich, vor Ort. Wir melden uns
+          innerhalb von 48&nbsp;Stunden.
+        </p>
+
+        <div class="ci-item">
+          <div class="ci-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 5.75 5.75l1.62-1.62a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><div class="ci-label">Telefon &amp; WhatsApp</div><div class="ci-val"><a href="tel:015234259962">0152 / 34259962</a></div></div>
+        </div>
+        <div class="ci-item">
+          <div class="ci-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="ci-label">E-Mail</div><div class="ci-val"><a href="mailto:markus@koslowski-raumwunder.de">markus@koslowski-raumwunder.de</a></div></div>
+        </div>
+        <div class="ci-item">
+          <div class="ci-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="ci-label">Einsatzgebiet</div><div class="ci-val">Bochum &amp; ganz NRW</div></div>
+        </div>
+        <div class="ci-item" style="border-bottom:none;">
+          <div class="ci-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><div class="ci-label">Rückmeldung</div><div class="ci-val">Innerhalb von 48 Stunden</div></div>
+        </div>
+
+        <div class="contact-social">
+          <a href="https://www.facebook.com/raumwunder.bochum/" target="_blank" rel="noopener" class="soc-a" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/raumwunder.bochum/" target="_blank" rel="noopener" class="soc-a" aria-label="Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <form id="contactForm">
+          <div class="fr">
+            <div class="fg"><label class="fl" for="fn">Name *</label><input class="fc" type="text" id="fn" name="name" placeholder="Ihr Name" required></div>
+            <div class="fg"><label class="fl" for="fp">Telefon *</label><input class="fc" type="tel" id="fp" name="telefon" placeholder="0152 / ..." required></div>
+          </div>
+          <div class="fg"><label class="fl" for="fe">E-Mail *</label><input class="fc" type="email" id="fe" name="email" placeholder="ihre@email.de" required></div>
+          <div class="fg">
+            <label class="fl" for="fs">Leistung</label>
+            <select class="fc" id="fs" name="leistung">
+              <option value="">Bitte wählen ...</option>
+              <option>Fugenloses Bad</option>
+              <option>Fugenloser Boden</option>
+              <option>Malerarbeiten</option>
+              <option>Bodenverlegung (Parkett / Vinyl / Laminat)</option>
+              <option>Trockenbau &amp; Putz</option>
+              <option>Mehrere Gewerke / Sonstiges</option>
+            </select>
+          </div>
+          <div class="fg"><label class="fl" for="fm">Nachricht</label><textarea class="fc" id="fm" name="nachricht" placeholder="Raum, ca. m², Wunschtermin …"></textarea></div>
+          <button type="submit" class="form-submit" id="formBtn">Anfrage absenden</button>
+          <div id="formOk" style="display:none;margin-top:1rem;padding:1rem;background:var(--surface-2);border-radius:3px;color:var(--accent);font-size:.875rem;line-height:1.5;">
+            ✓ Vielen Dank! Wir melden uns innerhalb von 48 Stunden.
+          </div>
+        </form>
+        <a href="https://wa.me/4915234259962?text=Hallo%20Raumwunder!%20Ich%20interessiere%20mich%20f%C3%BCr%20eine%20kostenlose%20Beratung." class="wa-btn" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          Per WhatsApp anfragen
+        </a>
+        <p class="form-note">
+          Direkt per E-Mail:
+          <a href="mailto:markus@koslowski-raumwunder.de" style="color:var(--accent);">markus@koslowski-raumwunder.de</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+============================================================= -->
+<footer class="footer">
+  <div class="c">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand-name">Raumwunder Koslowski</div>
+        <div class="footer-copy">&copy; 2026 &middot; Alle Rechte vorbehalten</div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="https://koslowski-raumwunder.de/impressum/" target="_blank">Impressum</a></li>
+        <li><a href="https://koslowski-raumwunder.de/datenschutzerklaerung/" target="_blank">Datenschutz</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+      </ul>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/raumwunder.bochum/" target="_blank" rel="noopener" class="soc-a" aria-label="Facebook">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/raumwunder.bochum/" target="_blank" rel="noopener" class="soc-a" aria-label="Instagram">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ============================================================
+     FLOATING WHATSAPP BUTTON
+============================================================= -->
+<a href="https://wa.me/4915234259962?text=Hallo%20Raumwunder!%20Ich%20interessiere%20mich%20f%C3%BCr%20eine%20kostenlose%20Beratung."
+   class="wa-float" id="waFloat" target="_blank" rel="noopener" aria-label="Per WhatsApp anfragen">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+  </svg>
+  <span>WhatsApp</span>
+</a>
+
+
+<!-- ============================================================
+     SCRIPTS
+============================================================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js" crossorigin="anonymous"></script>
+
+<script>
+'use strict';
+
+/* ============================================================
+   REDUCED-MOTION CHECK
+============================================================ */
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============================================================
+   LENIS SMOOTH SCROLL
+============================================================ */
+let lenis;
+if (!prefersReduced) {
+  lenis = new Lenis({
+    duration: 1.25,
+    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: 'vertical',
+    smoothWheel: true,
+  });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(time => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+
+/* ============================================================
+   GSAP INIT
+============================================================ */
+gsap.registerPlugin(ScrollTrigger);
+
+/* ============================================================
+   NAV — direction-aware hide/show + glassmorphism
+============================================================ */
+(function navScroll() {
+  const nav = document.getElementById('nav');
+  let lastY = 0;
+  let ticking = false;
+
+  function update() {
+    const y = window.scrollY;
+    const diff = y - lastY;
+
+    // Scrolled state (glassmorphism)
+    nav.classList.toggle('scrolled', y > 60);
+
+    // Hide nav when scrolling down > 120px from top; show when scrolling up
+    if (y > 120) {
+      if (diff > 4) {
+        nav.classList.add('nav--hidden');
+      } else if (diff < -4) {
+        nav.classList.remove('nav--hidden');
+      }
+    } else {
+      nav.classList.remove('nav--hidden');
+    }
+
+    lastY = y;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+})();
+
+/* ============================================================
+   MOBILE MENU
+============================================================ */
+const burger  = document.getElementById('burger');
+const mobMenu = document.getElementById('mobMenu');
+const mobClose = document.getElementById('mobClose');
+
+function openMob()  { mobMenu.classList.add('open');    document.body.style.overflow = 'hidden'; }
+function closeMob() { mobMenu.classList.remove('open'); document.body.style.overflow = ''; }
+
+burger.addEventListener('click', openMob);
+mobClose.addEventListener('click', closeMob);
+mobMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+
+/* ============================================================
+   HERO ENTRANCE
+============================================================ */
+(function heroEntrance() {
+  if (prefersReduced) return;
+
+  // Set initial states
+  gsap.set(['.hero-h1-wrap span', '.hero-h1-wrap em'], { yPercent: 115 });
+  gsap.set(['#heroMeta', '#heroSub', '#heroActions', '#heroTrust', '#heroScroll'], { opacity: 0, y: 20 });
+
+  const tl = gsap.timeline({ delay: 0.15 });
+
+  tl.to('.hero-h1-wrap span, .hero-h1-wrap em', {
+      yPercent: 0,
+      duration: 1.15,
+      stagger: 0.1,
+      ease: 'expo.out',
+    })
+    .to('#heroMeta', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.75')
+    .to('#heroSub',  { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, '-=0.55')
+    .to('#heroActions', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '-=0.45')
+    .to('#heroTrust',   { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.35')
+    .to('#heroScroll',  { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '-=0.3');
+})();
+
+/* ============================================================
+   HERO PARALLAX
+============================================================ */
+if (!prefersReduced) {
+  gsap.to('#heroBg', {
+    yPercent: 28,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.hero',
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    }
+  });
+}
+
+/* ============================================================
+   MARQUEE (CSS handled, just ensure visibility)
+============================================================ */
+
+/* ============================================================
+   SERVICES STICKY SHOWCASE
+   ─ CSS sticky handles the pin, ScrollTrigger tracks progress
+============================================================ */
+(function servicesShowcase() {
+  const panels   = [0, 1, 2];
+  let current    = 0;
+
+  function activate(idx) {
+    if (idx === current) return;
+    current = idx;
+
+    // Images
+    document.querySelectorAll('.svc-img').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+    // Content panels
+    document.querySelectorAll('.svc-panel').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+    // Dots
+    document.querySelectorAll('.svc-dot').forEach((el, i) => {
+      el.classList.toggle('active', i === idx);
+    });
+    // Large number
+    const num = document.getElementById('svcPanelNum');
+    if (num) num.textContent = String(idx + 1).padStart(2, '0');
+    // Progress bar
+    const fill = document.getElementById('svcProgressFill');
+    if (fill) fill.style.width = `${((idx + 1) / 3) * 100}%`;
+    // Hide scroll hint after first advance
+    if (idx > 0) {
+      const hint = document.getElementById('svcScrollHint');
+      if (hint) hint.style.opacity = '0';
+    }
+  }
+
+  ScrollTrigger.create({
+    trigger: '.services-section',
+    start: 'top top',
+    end: 'bottom bottom',
+    onUpdate(self) {
+      const p = self.progress;
+      const idx = p < 0.34 ? 0 : p < 0.68 ? 1 : 2;
+      activate(idx);
+    },
+  });
+
+  // Dot click navigation (jump to panel via Lenis/scroll)
+  document.querySelectorAll('.svc-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.dataset.svc, 10);
+      const sect = document.querySelector('.services-section');
+      const sectTop = sect.getBoundingClientRect().top + window.scrollY;
+      const target = sectTop + (window.innerHeight * idx);
+      if (lenis) {
+        lenis.scrollTo(target, { duration: 1.2 });
+      } else {
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+
+/* ============================================================
+   TEXT SCRUB — word-by-word reveal
+============================================================ */
+(function textScrub() {
+  const el = document.getElementById('scrubText');
+  if (!el) return;
+
+  // Split text into word spans
+  el.innerHTML = el.textContent
+    .trim()
+    .split(/\s+/)
+    .map(w => `<span class="w">${w}</span>`)
+    .join(' ');
+
+  if (prefersReduced) {
+    document.querySelectorAll('.w').forEach(w => { w.style.opacity = 1; });
+    return;
+  }
+
+  gsap.fromTo('.w',
+    { opacity: 0.08 },
+    {
+      opacity: 1,
+      stagger: { each: 0.55, ease: 'none' },
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#textScrub',
+        start: 'top 70%',
+        end: 'bottom 30%',
+        scrub: 1.5,
+      }
+    }
+  );
+})();
+
+/* ============================================================
+   STATS — counter animation on enter
+============================================================ */
+(function statsCounters() {
+  function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+  document.querySelectorAll('.count-num').forEach(el => {
+    const target = parseInt(el.dataset.target, 10);
+    let started = false;
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 85%',
+      onEnter() {
+        if (started) return;
+        started = true;
+        let t0 = null;
+        const duration = 1600;
+        function step(ts) {
+          if (!t0) t0 = ts;
+          const p = Math.min((ts - t0) / duration, 1);
+          el.textContent = Math.round(easeOutQuart(p) * target);
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+    });
+  });
+})();
+
+/* ============================================================
+   BENEFITS — stagger reveal on scroll
+============================================================ */
+(function benefitsReveal() {
+  if (prefersReduced) return;
+
+  gsap.set('.benefit', { opacity: 0, y: 30 });
+
+  ScrollTrigger.batch('.benefit', {
+    onEnter(batch) {
+      gsap.to(batch, {
+        opacity: 1, y: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: 'power3.out',
+      });
+    },
+    start: 'top 85%',
+  });
+})();
+
+/* ============================================================
+   PROCESS — horizontal scroll (desktop only)
+============================================================ */
+(function processHorizontal() {
+  const wrapper = document.getElementById('processWrapper');
+  const track   = document.getElementById('processTrack');
+  const progFill = document.getElementById('processProgFill');
+  if (!wrapper || !track) return;
+
+  const panels = track.querySelectorAll('.process-panel');
+  const isMobile = window.innerWidth < 640;
+
+  if (isMobile || prefersReduced) {
+    // On mobile: just normal vertical layout, stagger reveal
+    panels.forEach((p, i) => {
+      p.style.width = '100%';
+      p.style.gridTemplateColumns = '1fr';
+    });
+    gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
+    ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
+      onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
+      start: 'top 90%',
+    });
+    return;
+  }
+
+  const totalScroll = (panels.length - 1) * window.innerWidth;
+
+  // Animate horizontal track
+  gsap.to(track, {
+    x: -totalScroll,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: wrapper,
+      pin: true,
+      scrub: 0.5,
+      end: () => `+=${totalScroll}`,
+      snap: {
+        snapTo: 1 / (panels.length - 1),
+        duration: { min: 0.2, max: 0.5 },
+        ease: 'power1.inOut',
+      },
+      onUpdate(self) {
+        if (progFill) progFill.style.width = `${self.progress * 100}%`;
+      },
+    }
+  });
+
+  // Animate each panel's content as it enters
+  panels.forEach((panel, i) => {
+    const num   = panel.querySelector('.proc-num');
+    const title = panel.querySelector('.proc-title');
+    const desc  = panel.querySelector('.proc-desc');
+    const details = panel.querySelectorAll('.proc-detail');
+
+    if (prefersReduced) return;
+
+    gsap.set([num, title, desc, ...details], { opacity: 0, y: 24 });
+    gsap.to([num, title, desc, ...details], {
+      opacity: 1, y: 0,
+      duration: 0.7,
+      stagger: 0.08,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: wrapper,
+        start: () => `top+=${i * window.innerWidth * 0.8} top`,
+        containerAnimation: gsap.getById('processAnim'),
+        toggleActions: 'play none none reverse',
+      }
+    });
+  });
+})();
+
+/* ============================================================
+   GALLERY — parallax per image
+============================================================ */
+(function galleryParallax() {
+  if (prefersReduced) return;
+
+  const speeds = [-8, -14, -6, -18, -10];
+  document.querySelectorAll('.g-item').forEach((item, i) => {
+    const img = item.querySelector('img');
+    if (!img) return;
+    gsap.fromTo(img,
+      { yPercent: -speeds[i % speeds.length] / 2 },
+      {
+        yPercent: speeds[i % speeds.length],
+        ease: 'none',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      }
+    );
+  });
+
+  // Gallery grid reveal
+  gsap.set('.g-item', { opacity: 0, scale: 0.97 });
+  ScrollTrigger.batch('.g-item', {
+    onEnter(batch) {
+      gsap.to(batch, {
+        opacity: 1, scale: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+      });
+    },
+    start: 'top 90%',
+  });
+})();
+
+/* ============================================================
+   CTA SECTION — text entrance
+============================================================ */
+(function ctaReveal() {
+  if (prefersReduced) return;
+  gsap.set(['.cta-heading', '.cta-sub', '.cta-btns'], { opacity: 0, y: 30 });
+  ScrollTrigger.create({
+    trigger: '.cta-section',
+    start: 'top 70%',
+    onEnter() {
+      gsap.to(['.cta-heading', '.cta-sub', '.cta-btns'], {
+        opacity: 1, y: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+      });
+    }
+  });
+})();
+
+/* ============================================================
+   CONTACT SECTION — reveal
+============================================================ */
+(function contactReveal() {
+  if (prefersReduced) return;
+  gsap.set('.contact-section .contact-grid > *', { opacity: 0, y: 30 });
+  ScrollTrigger.create({
+    trigger: '.contact-section',
+    start: 'top 75%',
+    onEnter() {
+      gsap.to('.contact-section .contact-grid > *', {
+        opacity: 1, y: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: 'power3.out',
+      });
+    }
+  });
+})();
+
+/* ============================================================
+   TESTIMONIALS — stagger reveal
+============================================================ */
+(function testiReveal() {
+  if (prefersReduced) return;
+
+  gsap.set('[data-testi]', { opacity: 0, y: 40 });
+
+  ScrollTrigger.batch('[data-testi]', {
+    onEnter(batch) {
+      gsap.to(batch, {
+        opacity: 1, y: 0,
+        duration: 0.9,
+        stagger: 0.15,
+        ease: 'power3.out',
+      });
+    },
+    start: 'top 88%',
+  });
+})();
+
+/* ============================================================
+   MAGNETIC BUTTONS — 21st.dev inspired
+============================================================ */
+(function magneticButtons() {
+  if (prefersReduced) return;
+
+  document.querySelectorAll('.btn-primary').forEach(btn => {
+    const wrap = document.createElement('span');
+    wrap.className = 'magnetic-wrap';
+    btn.parentNode.insertBefore(wrap, btn);
+    wrap.appendChild(btn);
+
+    const strength = 0.35;
+
+    wrap.addEventListener('mousemove', e => {
+      const rect = wrap.getBoundingClientRect();
+      const cx = rect.left + rect.width  / 2;
+      const cy = rect.top  + rect.height / 2;
+      const dx = (e.clientX - cx) * strength;
+      const dy = (e.clientY - cy) * strength;
+      gsap.to(btn, { x: dx, y: dy, duration: 0.4, ease: 'power2.out' });
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+      gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.5)' });
+    });
+  });
+})();
+
+/* ============================================================
+   CUSTOM CURSOR DOT
+============================================================ */
+(function customCursor() {
+  if (prefersReduced || window.matchMedia('(hover: none)').matches) return;
+
+  const dot = document.createElement('div');
+  dot.id = 'cursor-dot';
+  dot.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 8px; height: 8px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
+    mix-blend-mode: screen;
+  `;
+  document.body.appendChild(dot);
+
+  const ring = document.createElement('div');
+  ring.id = 'cursor-ring';
+  ring.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 36px; height: 36px;
+    border: 1px solid oklch(0.75 0.076 80 / 0.4); border-radius: 50%;
+    pointer-events: none; z-index: 99998;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s, height 0.4s, opacity 0.4s, border-color 0.3s;
+  `;
+  document.body.appendChild(ring);
+
+  let mx = -100, my = -100;
+  let rx = -100, ry = -100;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  (function loop() {
+    rx = lerp(rx, mx, 0.12);
+    ry = lerp(ry, my, 0.12);
+    dot.style.left  = mx + 'px';
+    dot.style.top   = my + 'px';
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+
+  // Grow on hover over interactive elements
+  document.querySelectorAll('a, button, .btn, .svc-dot, .nav-burger').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width  = '56px';
+      ring.style.height = '56px';
+      ring.style.borderColor = 'oklch(0.75 0.076 80 / 0.7)';
+      dot.style.opacity = '0';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width  = '36px';
+      ring.style.height = '36px';
+      ring.style.borderColor = 'oklch(0.75 0.076 80 / 0.4)';
+      dot.style.opacity = '1';
+    });
+  });
+
+  document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
+})();
+
+/* ============================================================
+   CONTACT FORM — mailto fallback
+============================================================ */
+(function contactForm() {
+  const form = document.getElementById('contactForm');
+  const btn  = document.getElementById('formBtn');
+  const ok   = document.getElementById('formOk');
+  if (!form) return;
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const body = encodeURIComponent(
+      `Name: ${d.get('name')}\nTelefon: ${d.get('telefon')}\nE-Mail: ${d.get('email')}\nLeistung: ${d.get('leistung')}\n\nNachricht:\n${d.get('nachricht')}`
+    );
+    btn.textContent = 'Wird gesendet …';
+    btn.disabled = true;
+    setTimeout(() => {
+      window.location.href = `mailto:markus@koslowski-raumwunder.de?subject=${encodeURIComponent('Anfrage – koslowski-raumwunder.de')}&body=${body}`;
+      form.reset();
+      btn.textContent = 'Anfrage absenden';
+      btn.disabled = false;
+      ok.style.display = 'block';
+      setTimeout(() => { ok.style.display = 'none'; }, 6000);
+    }, 400);
+  });
+})();
+
+/* ============================================================
+   FLOATING WHATSAPP BUTTON — show after scrolling past hero
+============================================================ */
+(function waFloatBtn() {
+  const btn = document.getElementById('waFloat');
+  if (!btn) return;
+  let visible = false;
+
+  function update() {
+    const show = window.scrollY > window.innerHeight * 0.6;
+    if (show === visible) return;
+    visible = show;
+    btn.classList.toggle('visible', show);
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+/* ============================================================
+   RESIZE – refresh ScrollTrigger
+============================================================ */
+window.addEventListener('resize', () => ScrollTrigger.refresh(), { passive: true });
+</script>
+
+</body>
+</html>
