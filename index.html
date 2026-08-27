@@ -1705,8 +1705,8 @@ if (!prefersReduced) {
 
   const totalScroll = (panels.length - 1) * window.innerWidth;
 
-  // Animate horizontal track
-  gsap.to(track, {
+  // Animate horizontal track — store reference for containerAnimation
+  const trackAnim = gsap.to(track, {
     x: -totalScroll,
     ease: 'none',
     scrollTrigger: {
@@ -1725,29 +1725,30 @@ if (!prefersReduced) {
     }
   });
 
-  // Animate each panel's content as it enters
-  panels.forEach((panel, i) => {
-    const num   = panel.querySelector('.proc-num');
-    const title = panel.querySelector('.proc-title');
-    const desc  = panel.querySelector('.proc-desc');
-    const details = panel.querySelectorAll('.proc-detail');
+  // Animate each panel's content as it scrolls into view
+  if (!prefersReduced) {
+    panels.forEach((panel) => {
+      const num     = panel.querySelector('.proc-num');
+      const title   = panel.querySelector('.proc-title');
+      const desc    = panel.querySelector('.proc-desc');
+      const details = [...panel.querySelectorAll('.proc-detail')];
+      const els     = [num, title, desc, ...details].filter(Boolean);
 
-    if (prefersReduced) return;
-
-    gsap.set([num, title, desc, ...details], { opacity: 0, y: 24 });
-    gsap.to([num, title, desc, ...details], {
-      opacity: 1, y: 0,
-      duration: 0.7,
-      stagger: 0.08,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: wrapper,
-        start: () => `top+=${i * window.innerWidth * 0.8} top`,
-        containerAnimation: gsap.getById('processAnim'),
-        toggleActions: 'play none none reverse',
-      }
+      gsap.set(els, { opacity: 0, y: 24 });
+      gsap.to(els, {
+        opacity: 1, y: 0,
+        duration: 0.7,
+        stagger: 0.08,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: panel,
+          containerAnimation: trackAnim,
+          start: 'left 80%',
+          toggleActions: 'play none none reverse',
+        }
+      });
     });
-  });
+  }
 })();
 
 /* ============================================================
