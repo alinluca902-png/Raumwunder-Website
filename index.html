@@ -699,11 +699,19 @@
       .contact-section { padding: 5rem 0; }
       .fr { grid-template-columns: 1fr; }
       .cta-btns { flex-direction: column; align-items: center; }
-      .process-panel { grid-template-columns: 1fr; min-height: auto; padding: 3rem 1.5rem; gap: 2rem; }
-      .process-panel-right { display: none; }
+      /* Process section mobile: vertical layout */
+      .process-wrapper { height: auto !important; overflow: visible !important; }
+      .process-panels-vp { overflow: visible !important; flex: none !important; height: auto !important; }
+      .process-track { flex-direction: column; width: 100% !important; transform: none !important; height: auto !important; }
+      .process-panel { grid-template-columns: 1fr; height: auto !important; min-height: 0; padding: 2.5rem 1.25rem; gap: 2rem; border-top: 1px solid var(--ink-subtle); }
+      .process-panel-right { display: flex; }
       .svc-nav { right: 1rem; }
       .svc-panel-num { right: 1rem; }
       .benefit { padding: 2rem 1.5rem; }
+      /* Services text readability on mobile */
+      .svc-title { text-shadow: 0 2px 12px oklch(0 0 0 / 0.7), 0 1px 4px oklch(0 0 0 / 0.9); font-weight: 400; }
+      .svc-desc { text-shadow: 0 1px 8px oklch(0 0 0 / 0.8); }
+      .svc-feature { text-shadow: 0 1px 6px oklch(0 0 0 / 0.7); }
     }
 
     /* ========================================================
@@ -1471,6 +1479,9 @@
   <div class="c">
     <div class="footer-inner">
       <div>
+        <div class="footer-logo-wrap">
+          <img id="footerLogo" alt="Raumwunder Koslowski" style="height:40px;width:auto;filter:brightness(0) invert(1);opacity:0.7;display:block;margin-bottom:0.75rem;" />
+        </div>
         <div class="footer-brand-name">Raumwunder Koslowski</div>
         <div class="footer-copy">&copy; 2026 &middot; Alle Rechte vorbehalten</div>
       </div>
@@ -1846,7 +1857,7 @@ if (!prefersReduced) {
    GALLERY — parallax per image
 ============================================================ */
 (function galleryParallax() {
-  if (prefersReduced) return;
+  if (prefersReduced || window.innerWidth < 768) return;
 
   const speeds = [-8, -14, -6, -18, -10];
   document.querySelectorAll('.g-item').forEach((item, i) => {
@@ -2309,5 +2320,12 @@ window.addEventListener('resize', () => ScrollTrigger.refresh(), { passive: true
 })();
 </script>
 
+<script>
+(function() {
+  const navLogo = document.querySelector('.nav-logo img');
+  const footerLogo = document.getElementById('footerLogo');
+  if (navLogo && footerLogo) footerLogo.src = navLogo.src;
+})();
+</script>
 </body>
 </html>
