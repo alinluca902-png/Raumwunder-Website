@@ -764,6 +764,8 @@
       max-height: 85vh;
       overflow-y: scroll;
       overscroll-behavior: contain;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
       padding: 3rem;
       position: relative;
       transform: translateY(20px);
@@ -2268,8 +2270,8 @@ window.addEventListener('resize', () => ScrollTrigger.refresh(), { passive: true
 (function legalModals() {
   // Capture wheel events on the modal BEFORE Lenis sees them
   // Lenis uses passive:false on window and calls preventDefault() —
-  // by stopping propagation in capture phase we shield the modal.
-  function stopWheelProp(e) { e.stopPropagation(); }
+  // by stopping propagation in capture phase we shield the modal (desktop + mobile).
+  function stopScrollProp(e) { e.stopPropagation(); }
 
   function openModal(id) {
     const el = document.getElementById(id);
@@ -2277,14 +2279,22 @@ window.addEventListener('resize', () => ScrollTrigger.refresh(), { passive: true
     el.classList.add('open');
     if (window.lenis) window.lenis.stop();
     const inner = el.querySelector('.legal-modal');
-    if (inner) inner.addEventListener('wheel', stopWheelProp, { capture: true, passive: true });
+    if (inner) {
+      inner.addEventListener('wheel',      stopScrollProp, { capture: true, passive: true });
+      inner.addEventListener('touchstart', stopScrollProp, { capture: true, passive: true });
+      inner.addEventListener('touchmove',  stopScrollProp, { capture: true, passive: true });
+    }
   }
   function closeModal(id) {
     const el = document.getElementById(id);
     if (!el) return;
     el.classList.remove('open');
     const inner = el.querySelector('.legal-modal');
-    if (inner) inner.removeEventListener('wheel', stopWheelProp, { capture: true });
+    if (inner) {
+      inner.removeEventListener('wheel',      stopScrollProp, { capture: true });
+      inner.removeEventListener('touchstart', stopScrollProp, { capture: true });
+      inner.removeEventListener('touchmove',  stopScrollProp, { capture: true });
+    }
     const anyOpen = document.querySelector('.legal-modal-overlay.open');
     if (!anyOpen && window.lenis) window.lenis.start();
   }
