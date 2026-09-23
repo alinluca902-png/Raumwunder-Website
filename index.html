@@ -2054,22 +2054,31 @@ if (!prefersReduced) {
   const ok   = document.getElementById('formOk');
   if (!form) return;
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    const d = new FormData(form);
-    const body = encodeURIComponent(
-      `Name: ${d.get('name')}\nTelefon: ${d.get('telefon')}\nE-Mail: ${d.get('email')}\nLeistung: ${d.get('leistung')}\n\nNachricht:\n${d.get('nachricht')}`
-    );
     btn.textContent = 'Wird gesendet …';
     btn.disabled = true;
-    setTimeout(() => {
-      window.location.href = `mailto:markus@koslowski-raumwunder.de?subject=${encodeURIComponent('Anfrage – koslowski-raumwunder.de')}&body=${body}`;
-      form.reset();
-      btn.textContent = 'Anfrage absenden';
-      btn.disabled = false;
-      ok.style.display = 'block';
-      setTimeout(() => { ok.style.display = 'none'; }, 6000);
-    }, 400);
+
+    try {
+      const res = await fetch('https://formspree.io/f/mgavyzjk', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.reset();
+        ok.style.display = 'block';
+        setTimeout(() => { ok.style.display = 'none'; }, 6000);
+      } else {
+        alert('Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an markus@koslowski-raumwunder.de');
+      }
+    } catch (err) {
+      alert('Keine Verbindung. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an markus@koslowski-raumwunder.de');
+    }
+
+    btn.textContent = 'Anfrage absenden';
+    btn.disabled = false;
   });
 })();
 
