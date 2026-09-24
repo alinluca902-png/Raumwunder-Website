@@ -688,6 +688,35 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
+    /* Touch devices (iPad, iPhone): native CSS horizontal scroll snap */
+    @media (hover: none) {
+      .process-wrapper { height: 100svh; height: 100dvh; overflow: hidden; position: relative; }
+      .process-header { position: sticky; top: 0; z-index: 2; background: var(--surface); padding: 1.5rem 0 1rem; }
+      .process-panels-vp {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
+      }
+      .process-track {
+        display: flex;
+        width: max-content;
+        height: 100%;
+        transform: none !important;
+      }
+      .process-panel {
+        width: 100vw;
+        flex-shrink: 0;
+        scroll-snap-align: start;
+      }
+    }
+    @media (hover: none) and (max-width: 767px) {
+      .process-panel { grid-template-columns: 1fr; height: auto !important; overflow-y: auto; padding: 1.5rem 1.25rem 2rem; gap: 1.5rem; }
+      .process-panels-vp { overflow-x: hidden; scroll-snap-type: none; }
+      .process-wrapper { height: auto !important; overflow: visible !important; }
+      .process-track { flex-direction: column; width: 100% !important; }
+    }
     @media (max-width: 767px) {
       /* Process section mobile only: vertical layout */
       .process-wrapper { height: auto !important; overflow: visible !important; }
@@ -1810,13 +1839,24 @@ if (!prefersReduced) {
 
   const panels = track.querySelectorAll('.process-panel');
   const isMobile = window.innerWidth < 768;
+  const isTouch = window.matchMedia('(hover: none)').matches;
 
   if (isMobile || prefersReduced) {
-    // On mobile: just normal vertical layout, stagger reveal
+    // On mobile phones: vertical layout, stagger reveal
     panels.forEach((p, i) => {
       p.style.width = '100%';
       p.style.gridTemplateColumns = '1fr';
     });
+    gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
+    ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
+      onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
+      start: 'top 90%',
+    });
+    return;
+  }
+
+  if (isTouch) {
+    // On iPad/touch: CSS scroll snap handles it natively — no GSAP pinning needed
     gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
     ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
       onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
