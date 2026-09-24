@@ -688,19 +688,24 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
-    /* Touch tablet (iPad): CSS sticky + ScrollTrigger progress (same as Services) */
+    /* Touch tablet (iPad): exact same pattern as Services — stacked panels, ScrollTrigger switch */
     @media (hover: none) and (min-width: 768px) {
-      .process-outer { /* height set by JS */ }
-      .process-wrapper {
-        position: sticky;
-        top: 0;
-        height: 100svh;
-        height: 100dvh;
-        overflow: hidden;
+      .process-outer { height: 400svh; position: relative; }
+      .process-wrapper { position: sticky; top: 0; height: 100svh; height: 100dvh; overflow: hidden; }
+      .process-panels-vp { flex: 1; position: relative; overflow: hidden; }
+      .process-track { display: block; width: 100%; height: 100%; position: relative; transform: none !important; }
+      .process-panel {
+        position: absolute; inset: 0; width: 100%;
+        opacity: 0;
+        transform: translateX(60px);
+        transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        pointer-events: none;
+        grid-template-columns: 1fr;
+        padding: 2rem 2.5rem;
+        justify-content: center;
       }
-      .process-panels-vp { flex: 1; overflow: hidden; }
-      .process-track { display: flex; width: max-content; height: 100%; will-change: transform; }
-      .process-panel { width: 100vw; flex-shrink: 0; }
+      .process-panel.proc-active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+      .process-panel-right { display: flex; }
     }
     @media (max-width: 767px) {
       /* Process section mobile only: vertical layout */
@@ -1843,26 +1848,29 @@ if (!prefersReduced) {
   }
 
   if (isTouch) {
-    // iPad: CSS sticky wrapper + ScrollTrigger onUpdate (exactly like Services section)
+    // iPad: exact same pattern as Services — stacked panels, ScrollTrigger switches active
     const outer = document.getElementById('processOuter');
     if (!outer) return;
-    const totalScroll = (panels.length - 1) * window.innerWidth;
-    outer.style.height = `calc(100svh + ${totalScroll}px)`;
+
+    // Set first panel active immediately
+    let currentProc = 0;
+    panels[0].classList.add('proc-active');
+
+    function activateProc(idx) {
+      if (idx === currentProc) return;
+      currentProc = idx;
+      panels.forEach((p, i) => p.classList.toggle('proc-active', i === idx));
+      if (progFill) progFill.style.width = `${((idx + 1) / panels.length) * 100}%`;
+    }
 
     ScrollTrigger.create({
       trigger: outer,
       start: 'top top',
       end: 'bottom bottom',
       onUpdate(self) {
-        track.style.transform = `translateX(${-self.progress * totalScroll}px)`;
-        if (progFill) progFill.style.width = `${self.progress * 100}%`;
+        const idx = Math.min(panels.length - 1, Math.floor(self.progress * panels.length));
+        activateProc(idx);
       },
-    });
-
-    gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
-    ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
-      onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
-      start: 'top 90%',
     });
     return;
   }
