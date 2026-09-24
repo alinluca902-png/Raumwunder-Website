@@ -688,8 +688,17 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
+    @media (max-width: 1023px) {
+      /* Process section tablet+mobile: vertical layout */
+      .process-wrapper { height: auto !important; overflow: visible !important; }
+      .process-panels-vp { overflow: visible !important; flex: none !important; height: auto !important; }
+      .process-track { flex-direction: column; width: 100% !important; transform: none !important; height: auto !important; }
+      .process-panel { grid-template-columns: 1fr; height: auto !important; min-height: 0; padding: 2.5rem 1.5rem; gap: 2rem; border-top: 1px solid var(--ink-subtle); }
+      .process-panel-right { display: flex; }
+    }
     @media (max-width: 640px) {
-      .hero-content { padding-top: 5.5rem; padding-bottom: 4rem; }
+      .hero { align-items: flex-start; }
+      .hero-content { padding-top: 6.5rem; padding-bottom: 3rem; }
       .hero-scroll { right: 1.5rem; }
       .text-scrub { padding: 7rem 0; }
       .benefits-section { padding: 5rem 0; }
@@ -699,12 +708,7 @@
       .contact-section { padding: 5rem 0; }
       .fr { grid-template-columns: 1fr; }
       .cta-btns { flex-direction: column; align-items: center; }
-      /* Process section mobile: vertical layout */
-      .process-wrapper { height: auto !important; overflow: visible !important; }
-      .process-panels-vp { overflow: visible !important; flex: none !important; height: auto !important; }
-      .process-track { flex-direction: column; width: 100% !important; transform: none !important; height: auto !important; }
-      .process-panel { grid-template-columns: 1fr; height: auto !important; min-height: 0; padding: 2.5rem 1.25rem; gap: 2rem; border-top: 1px solid var(--ink-subtle); }
-      .process-panel-right { display: flex; }
+      /* Process section: handled by 1023px query below */
       .svc-nav { right: 1rem; }
       .svc-panel-num { right: 1rem; }
       .benefit { padding: 2rem 1.5rem; }
@@ -1057,7 +1061,7 @@
 ============================================================= -->
 <section class="text-scrub" id="textScrub">
   <div class="c">
-    <p class="scrub-text" id="scrubText">Mehr als ein Boden. Eine Philosophie. Wir erschaffen seit 2012 Räume die grenzenlos sind.</p>
+    <p class="scrub-text" id="scrubText">Mehr als ein Boden. Meine Philosophie. Wir erschaffen seit 2012 Räume die grenzenlos sind.</p>
   </div>
 </section>
 
@@ -1711,7 +1715,7 @@ if (!prefersReduced) {
   if (!el) return;
 
   // Split text into word spans
-  const GOLD_WORDS = new Set(['Eine', 'Philosophie.']);
+  const GOLD_WORDS = new Set(['Meine', 'Philosophie.']);
   el.innerHTML = el.textContent
     .trim()
     .split(/\s+/)
@@ -1803,7 +1807,7 @@ if (!prefersReduced) {
   if (!wrapper || !track) return;
 
   const panels = track.querySelectorAll('.process-panel');
-  const isMobile = window.innerWidth < 640;
+  const isMobile = window.innerWidth < 1024;
 
   if (isMobile || prefersReduced) {
     // On mobile: just normal vertical layout, stagger reveal
