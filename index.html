@@ -688,17 +688,15 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
-    /* Touch tablet (iPad): sticky scroll drives horizontal translation */
+    /* Touch tablet (iPad): CSS sticky + ScrollTrigger progress (same as Services) */
     @media (hover: none) and (min-width: 768px) {
-      .process-wrapper { overflow: visible !important; }
-      .process-sticky-inner {
+      .process-outer { /* height set by JS */ }
+      .process-wrapper {
         position: sticky;
         top: 0;
         height: 100svh;
         height: 100dvh;
         overflow: hidden;
-        display: flex;
-        flex-direction: column;
       }
       .process-panels-vp { flex: 1; overflow: hidden; }
       .process-track { display: flex; width: max-content; height: 100%; will-change: transform; }
@@ -1185,6 +1183,7 @@
      PROCESS (horizontal scroll)
 ============================================================= -->
 <section class="process-section" id="prozess">
+  <div class="process-outer" id="processOuter">
   <div class="process-wrapper" id="processWrapper">
     <div class="process-header c">
       <h2 class="fd-lg">Vom Erstgespräch<br><em>zum fertigen Projekt</em></h2>
@@ -1304,6 +1303,7 @@
     </div><!-- /track -->
     </div><!-- /panels-vp -->
   </div><!-- /wrapper -->
+  </div><!-- /processOuter -->
 </section>
 
 
@@ -1843,31 +1843,21 @@ if (!prefersReduced) {
   }
 
   if (isTouch) {
-    // iPad: vertical scroll drives horizontal track translation (like Services section)
-    // Wrap all children in a sticky inner div
-    const stickyInner = document.createElement('div');
-    stickyInner.className = 'process-sticky-inner';
-    Array.from(wrapper.children).forEach(child => stickyInner.appendChild(child));
-    wrapper.appendChild(stickyInner);
-
+    // iPad: CSS sticky wrapper + ScrollTrigger onUpdate (exactly like Services section)
+    const outer = document.getElementById('processOuter');
+    if (!outer) return;
     const totalScroll = (panels.length - 1) * window.innerWidth;
-    wrapper.style.height = `calc(100svh + ${totalScroll}px)`;
-    wrapper.style.overflow = 'visible';
+    outer.style.height = `calc(100svh + ${totalScroll}px)`;
 
-    function updateProcessTrack() {
-      const rect = wrapper.getBoundingClientRect();
-      const scrolled = Math.max(0, -rect.top);
-      const progress = Math.min(1, scrolled / totalScroll);
-      track.style.transform = `translateX(${-progress * totalScroll}px)`;
-      if (progFill) progFill.style.width = `${progress * 100}%`;
-    }
-
-    // Use Lenis scroll event if available, else native
-    if (window.lenis) {
-      window.lenis.on('scroll', updateProcessTrack);
-    } else {
-      window.addEventListener('scroll', updateProcessTrack, { passive: true });
-    }
+    ScrollTrigger.create({
+      trigger: outer,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate(self) {
+        track.style.transform = `translateX(${-self.progress * totalScroll}px)`;
+        if (progFill) progFill.style.width = `${self.progress * 100}%`;
+      },
+    });
 
     gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
     ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
