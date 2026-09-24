@@ -263,11 +263,11 @@
        SERVICES SHOWCASE (sticky scroll through 3 panels)
     ======================================================== */
     .services-section {
-      height: 280vh; /* 4 panels × 70vh */
+      height: 280vh; height: 280svh; /* 4 panels × 70svh — svh fixes iOS Safari address bar */
       position: relative;
     }
     .services-sticky {
-      position: sticky; top: 0; height: 100vh; overflow: hidden;
+      position: sticky; top: 0; height: 100vh; height: 100vh; height: 100svh; overflow: hidden;
     }
     /* Background images layer */
     .svc-images { position: absolute; inset: 0; }
@@ -416,7 +416,7 @@
     .process-section { background: var(--surface); }
     .process-wrapper {
       display: flex; flex-direction: column;
-      height: 100vh; overflow: hidden;
+      height: 100vh; height: 100svh; overflow: hidden;
     }
     .process-header { padding: 2.25rem 0 1.25rem; flex-shrink: 0; }
     .process-panels-vp { flex: 1; overflow: hidden; position: relative; }
@@ -688,8 +688,8 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
-    @media (max-width: 1023px) {
-      /* Process section tablet+mobile: vertical layout */
+    @media (max-width: 767px) {
+      /* Process section mobile only: vertical layout */
       .process-wrapper { height: auto !important; overflow: visible !important; }
       .process-panels-vp { overflow: visible !important; flex: none !important; height: auto !important; }
       .process-track { flex-direction: column; width: 100% !important; transform: none !important; height: auto !important; }
@@ -1538,6 +1538,8 @@ if (!prefersReduced) {
     smoothWheel: true,
   });
   lenis.on('scroll', ScrollTrigger.update);
+  // Also update ScrollTrigger on native scroll (for iOS touch)
+  window.addEventListener('scroll', ScrollTrigger.update, { passive: true });
 
   // Smooth anchor navigation via Lenis
   document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -1807,7 +1809,7 @@ if (!prefersReduced) {
   if (!wrapper || !track) return;
 
   const panels = track.querySelectorAll('.process-panel');
-  const isMobile = window.innerWidth < 1024;
+  const isMobile = window.innerWidth < 768;
 
   if (isMobile || prefersReduced) {
     // On mobile: just normal vertical layout, stagger reveal
