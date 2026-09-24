@@ -688,35 +688,21 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
-    /* Touch devices (iPad, iPhone): native CSS horizontal scroll snap */
-    @media (hover: none) {
-      .process-wrapper { height: 100svh; height: 100dvh; overflow: hidden; position: relative; }
-      .process-header { position: sticky; top: 0; z-index: 2; background: var(--surface); padding: 1.5rem 0 1rem; }
-      .process-panels-vp {
-        overflow-x: scroll;
-        overflow-y: hidden;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-x;
-        flex: 1;
-      }
-      .process-track {
+    /* Touch tablet (iPad): sticky scroll drives horizontal translation */
+    @media (hover: none) and (min-width: 768px) {
+      .process-wrapper { overflow: visible !important; }
+      .process-sticky-inner {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        height: 100dvh;
+        overflow: hidden;
         display: flex;
-        width: max-content;
-        height: 100%;
-        transform: none !important;
+        flex-direction: column;
       }
-      .process-panel {
-        width: 100vw;
-        flex-shrink: 0;
-        scroll-snap-align: start;
-      }
-    }
-    @media (hover: none) and (max-width: 767px) {
-      .process-panel { grid-template-columns: 1fr; height: auto !important; overflow-y: auto; padding: 1.5rem 1.25rem 2rem; gap: 1.5rem; }
-      .process-panels-vp { overflow-x: hidden; scroll-snap-type: none; }
-      .process-wrapper { height: auto !important; overflow: visible !important; }
-      .process-track { flex-direction: column; width: 100% !important; }
+      .process-panels-vp { flex: 1; overflow: hidden; }
+      .process-track { display: flex; width: max-content; height: 100%; will-change: transform; }
+      .process-panel { width: 100vw; flex-shrink: 0; }
     }
     @media (max-width: 767px) {
       /* Process section mobile only: vertical layout */
@@ -1209,7 +1195,7 @@
         <div class="process-prog-fill" id="processProgFill"></div>
       </div>
     </div>
-    <div class="process-panels-vp" data-lenis-prevent>
+    <div class="process-panels-vp">
     <div class="process-track" id="processTrack">
 
       <div class="process-panel">
@@ -1857,14 +1843,32 @@ if (!prefersReduced) {
   }
 
   if (isTouch) {
-    // On iPad/touch: CSS scroll snap handles it natively — no GSAP pinning needed
-    // Stop Lenis during horizontal swipe so it doesn't block native scroll
-    const vp = document.querySelector('.process-panels-vp');
-    if (vp) {
-      vp.addEventListener('touchstart', () => { if (window.lenis) window.lenis.stop(); }, { passive: true });
-      vp.addEventListener('touchend',   () => { if (window.lenis) window.lenis.start(); }, { passive: true });
-      vp.addEventListener('touchcancel',() => { if (window.lenis) window.lenis.start(); }, { passive: true });
+    // iPad: vertical scroll drives horizontal track translation (like Services section)
+    // Wrap all children in a sticky inner div
+    const stickyInner = document.createElement('div');
+    stickyInner.className = 'process-sticky-inner';
+    Array.from(wrapper.children).forEach(child => stickyInner.appendChild(child));
+    wrapper.appendChild(stickyInner);
+
+    const totalScroll = (panels.length - 1) * window.innerWidth;
+    wrapper.style.height = `calc(100svh + ${totalScroll}px)`;
+    wrapper.style.overflow = 'visible';
+
+    function updateProcessTrack() {
+      const rect = wrapper.getBoundingClientRect();
+      const scrolled = Math.max(0, -rect.top);
+      const progress = Math.min(1, scrolled / totalScroll);
+      track.style.transform = `translateX(${-progress * totalScroll}px)`;
+      if (progFill) progFill.style.width = `${progress * 100}%`;
     }
+
+    // Use Lenis scroll event if available, else native
+    if (window.lenis) {
+      window.lenis.on('scroll', updateProcessTrack);
+    } else {
+      window.addEventListener('scroll', updateProcessTrack, { passive: true });
+    }
+
     gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
     ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
       onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
