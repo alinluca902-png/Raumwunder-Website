@@ -697,6 +697,7 @@
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
         flex: 1;
       }
       .process-track {
@@ -1208,7 +1209,7 @@
         <div class="process-prog-fill" id="processProgFill"></div>
       </div>
     </div>
-    <div class="process-panels-vp">
+    <div class="process-panels-vp" data-lenis-prevent>
     <div class="process-track" id="processTrack">
 
       <div class="process-panel">
@@ -1857,6 +1858,13 @@ if (!prefersReduced) {
 
   if (isTouch) {
     // On iPad/touch: CSS scroll snap handles it natively — no GSAP pinning needed
+    // Stop Lenis during horizontal swipe so it doesn't block native scroll
+    const vp = document.querySelector('.process-panels-vp');
+    if (vp) {
+      vp.addEventListener('touchstart', () => { if (window.lenis) window.lenis.stop(); }, { passive: true });
+      vp.addEventListener('touchend',   () => { if (window.lenis) window.lenis.start(); }, { passive: true });
+      vp.addEventListener('touchcancel',() => { if (window.lenis) window.lenis.start(); }, { passive: true });
+    }
     gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
     ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
       onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
