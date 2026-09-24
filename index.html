@@ -715,7 +715,8 @@
     .proc-touch .process-panel-right { display: flex !important; }
     @media (max-width: 767px) {
       /* Process section mobile only: vertical layout */
-      .process-wrapper { height: auto !important; overflow: visible !important; }
+      .process-wrapper { position: static !important; height: auto !important; overflow: visible !important; }
+      .process-outer { position: static; }
       .process-panels-vp { overflow: visible !important; flex: none !important; height: auto !important; }
       .process-track { flex-direction: column; width: 100% !important; transform: none !important; height: auto !important; }
       .process-panel { grid-template-columns: 1fr; height: auto !important; min-height: 0; padding: 2.5rem 1.5rem; gap: 2rem; border-top: 1px solid var(--ink-subtle); }
@@ -1827,7 +1828,7 @@ if (!prefersReduced) {
 })();
 
 /* ============================================================
-   PROCESS — horizontal scroll (CSS sticky + ScrollTrigger, like Services)
+   PROCESS — horizontal scroll (CSS sticky + ScrollTrigger, same pattern as Services)
 ============================================================ */
 (function processHorizontal() {
   const outer    = document.getElementById('processOuter');
@@ -1854,8 +1855,11 @@ if (!prefersReduced) {
   /* ── iPad/Touch tablet: stacked panels, scroll switches active (exact Services pattern) ── */
   if (isTablet) {
     document.documentElement.classList.add('proc-touch');
+    // Force reflow so CSS applies 400svh height before ScrollTrigger reads it
+    void outer.offsetHeight;
+
     let currentProc = 0;
-    panels[0].classList.add('proc-active');
+    panels[0].classList.add('proc-active'); // show first panel immediately
 
     function activateProc(idx) {
       if (idx === currentProc) return;
@@ -1869,6 +1873,7 @@ if (!prefersReduced) {
       start: 'top top',
       end: 'bottom bottom',
       onUpdate(self) {
+        // Each panel gets equal share of scroll progress
         const idx = Math.min(panels.length - 1, Math.floor(self.progress * panels.length));
         activateProc(idx);
       },
@@ -1876,25 +1881,29 @@ if (!prefersReduced) {
     return;
   }
 
-  /* ── Desktop: CSS sticky wrapper, track translates horizontally ── */
+  /* ── Desktop: CSS sticky wrapper, GSAP animates track horizontally ── */
   const totalScroll = (panels.length - 1) * window.innerWidth;
   outer.style.height = `calc(100svh + ${totalScroll}px)`;
+  void outer.offsetHeight; // force reflow before ScrollTrigger reads positions
 
-  ScrollTrigger.create({
-    trigger: outer,
-    start: 'top top',
-    end: 'bottom bottom',
-    scrub: 0.15,
-    snap: {
-      snapTo: 1 / (panels.length - 1),
-      duration: { min: 0.15, max: 0.35 },
-      delay: 0.05,
-      ease: 'power1.inOut',
-    },
-    onUpdate(self) {
-      track.style.transform = `translateX(${-self.progress * totalScroll}px)`;
-      if (progFill) progFill.style.width = `${self.progress * 100}%`;
-    },
+  gsap.to(track, {
+    x: -totalScroll,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: outer,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.15,
+      snap: {
+        snapTo: 1 / (panels.length - 1),
+        duration: { min: 0.15, max: 0.35 },
+        delay: 0.05,
+        ease: 'power1.inOut',
+      },
+      onUpdate(self) {
+        if (progFill) progFill.style.width = `${self.progress * 100}%`;
+      },
+    }
   });
 
 })();
