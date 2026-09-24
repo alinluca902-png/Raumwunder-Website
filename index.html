@@ -1719,6 +1719,7 @@ if (!prefersReduced) {
       const idx = p < 0.25 ? 0 : p < 0.5 ? 1 : p < 0.75 ? 2 : 3;
       activate(idx);
     },
+    onLeaveBack() { activate(0); },   // reset when scrolling back above section
   });
 
   // Dot click navigation (jump to panel via Lenis/scroll)
@@ -1841,42 +1842,28 @@ if (!prefersReduced) {
   const isPhone  = window.innerWidth < 768;
   const isTablet = navigator.maxTouchPoints > 0 && window.innerWidth >= 768;
 
-  /* ── Phone: vertical stacked layout ── */
-  if (isPhone || prefersReduced) {
-    panels.forEach(p => { p.style.gridTemplateColumns = '1fr'; });
+  /* ── Phone + Tablet/Touch: vertical stacked layout (reliable on all touch devices) ── */
+  if (isPhone || isTablet || prefersReduced) {
+    // Reset sticky so the section flows normally
+    wrapper.style.position = 'static';
+    wrapper.style.height = 'auto';
+    wrapper.style.overflow = 'visible';
+    outer.style.position = 'static';
+    const vp = document.querySelector('.process-panels-vp');
+    if (vp) { vp.style.overflow = 'visible'; vp.style.flex = 'none'; vp.style.height = 'auto'; }
+    track.style.flexDirection = 'column';
+    track.style.width = '100%';
+    track.style.height = 'auto';
+    track.style.transform = 'none';
+    panels.forEach(p => {
+      p.style.width = '100%';
+      p.style.height = 'auto';
+      p.style.gridTemplateColumns = '1fr';
+    });
     gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
     ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
       onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
       start: 'top 90%',
-    });
-    return;
-  }
-
-  /* ── iPad/Touch tablet: stacked panels, scroll switches active (exact Services pattern) ── */
-  if (isTablet) {
-    document.documentElement.classList.add('proc-touch');
-    // Force reflow so CSS applies 400svh height before ScrollTrigger reads it
-    void outer.offsetHeight;
-
-    let currentProc = 0;
-    panels[0].classList.add('proc-active'); // show first panel immediately
-
-    function activateProc(idx) {
-      if (idx === currentProc) return;
-      currentProc = idx;
-      panels.forEach((p, i) => p.classList.toggle('proc-active', i === idx));
-      if (progFill) progFill.style.width = `${((idx + 1) / panels.length) * 100}%`;
-    }
-
-    ScrollTrigger.create({
-      trigger: outer,
-      start: 'top top',
-      end: 'bottom bottom',
-      onUpdate(self) {
-        // Each panel gets equal share of scroll progress
-        const idx = Math.min(panels.length - 1, Math.floor(self.progress * panels.length));
-        activateProc(idx);
-      },
     });
     return;
   }
