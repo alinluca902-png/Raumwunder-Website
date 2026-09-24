@@ -2105,6 +2105,19 @@ if (!prefersReduced) {
    RESIZE – refresh ScrollTrigger
 ============================================================ */
 window.addEventListener('resize', () => ScrollTrigger.refresh(), { passive: true });
+
+// iOS / iPad: ScrollTrigger-Positionen nach vollständigem Laden neu berechnen
+window.addEventListener('load', () => {
+  ScrollTrigger.refresh();
+  // Zweiter Refresh nach kurzem Delay für iOS Safari (dynamische Adressleiste & Fonts)
+  setTimeout(() => ScrollTrigger.refresh(), 300);
+  setTimeout(() => ScrollTrigger.refresh(), 800);
+});
+
+// Lenis auf Touch-Geräten sanfter konfigurieren
+if (lenis && window.matchMedia('(hover: none)').matches) {
+  lenis.options.duration = 0.8;
+}
 </script>
 
 
