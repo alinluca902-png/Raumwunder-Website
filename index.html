@@ -414,12 +414,16 @@
        PROCESS (horizontal scroll)
     ======================================================== */
     .process-section { background: var(--surface); }
+    /* process-outer: height set by JS (desktop) or .proc-touch class (iPad) */
+    .process-outer { position: relative; }
     .process-wrapper {
+      position: sticky; top: 0;          /* CSS sticky — works on all devices */
       display: flex; flex-direction: column;
-      height: 100vh; height: 100svh; overflow: hidden;
+      height: 100vh; height: 100svh; height: 100dvh;
+      overflow: hidden;
     }
     .process-header { padding: 2.25rem 0 1.25rem; flex-shrink: 0; }
-    .process-panels-vp { flex: 1; overflow: hidden; position: relative; }
+    .process-panels-vp { flex: 1; min-height: 0; overflow: hidden; position: relative; }
     .process-track {
       display: flex; width: max-content; height: 100%;
       will-change: transform;
@@ -688,41 +692,25 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
-    /* Touch tablet (iPad): class set by JS — stacked panels, ScrollTrigger switch (like Services) */
-    .proc-touch .process-outer { height: 400svh; position: relative; }
-    .proc-touch .process-wrapper {
-      position: sticky; top: 0;
-      height: 100svh; height: 100dvh;
-      overflow: hidden;
-    }
-    .proc-touch .process-panels-vp {
-      flex: 1; min-height: 0;
-      position: relative; overflow: hidden;
-    }
+    /* iPad: .proc-touch class added by JS — stacked panels, ScrollTrigger switches active */
+    .proc-touch .process-outer { height: 400svh; }
     .proc-touch .process-track {
-      display: block !important;
-      width: 100% !important;
-      height: 100%;
-      min-height: 100%;
-      position: relative;
-      transform: none !important;
+      display: block !important; width: 100% !important;
+      position: relative; transform: none !important;
     }
     .proc-touch .process-panel {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      width: 100% !important;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      width: 100% !important; height: auto !important;
       opacity: 0;
       transform: translateX(60px);
       transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
       grid-template-columns: 1fr !important;
-      padding: 2rem 2.5rem;
-      align-items: center;
+      padding: 3rem 2.5rem;
+      align-items: start;
     }
     .proc-touch .process-panel.proc-active {
-      opacity: 1;
-      transform: translateX(0);
-      pointer-events: auto;
+      opacity: 1; transform: translateX(0); pointer-events: auto;
     }
     .proc-touch .process-panel-right { display: flex !important; }
     @media (max-width: 767px) {
@@ -1839,24 +1827,22 @@ if (!prefersReduced) {
 })();
 
 /* ============================================================
-   PROCESS — horizontal scroll (desktop only)
+   PROCESS — horizontal scroll (CSS sticky + ScrollTrigger, like Services)
 ============================================================ */
 (function processHorizontal() {
-  const wrapper = document.getElementById('processWrapper');
-  const track   = document.getElementById('processTrack');
+  const outer    = document.getElementById('processOuter');
+  const wrapper  = document.getElementById('processWrapper');
+  const track    = document.getElementById('processTrack');
   const progFill = document.getElementById('processProgFill');
-  if (!wrapper || !track) return;
+  if (!outer || !wrapper || !track) return;
 
-  const panels = track.querySelectorAll('.process-panel');
-  const isMobile = window.innerWidth < 768;
-  const isTouch = navigator.maxTouchPoints > 0 && window.innerWidth >= 768;
+  const panels   = track.querySelectorAll('.process-panel');
+  const isPhone  = window.innerWidth < 768;
+  const isTablet = navigator.maxTouchPoints > 0 && window.innerWidth >= 768;
 
-  if (isMobile || prefersReduced) {
-    // On mobile phones: vertical layout, stagger reveal
-    panels.forEach((p, i) => {
-      p.style.width = '100%';
-      p.style.gridTemplateColumns = '1fr';
-    });
+  /* ── Phone: vertical stacked layout ── */
+  if (isPhone || prefersReduced) {
+    panels.forEach(p => { p.style.gridTemplateColumns = '1fr'; });
     gsap.set('.proc-num, .proc-title, .proc-desc', { opacity: 0, y: 20 });
     ScrollTrigger.batch(['.proc-num', '.proc-title', '.proc-desc'], {
       onEnter(batch) { gsap.to(batch, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', stagger: 0.08 }); },
@@ -1865,14 +1851,9 @@ if (!prefersReduced) {
     return;
   }
 
-  if (isTouch) {
-    // iPad: exact same pattern as Services — stacked panels, ScrollTrigger switches active
-    const outer = document.getElementById('processOuter');
-    if (!outer) return;
-    // Drive CSS via class (avoids (hover:none) mismatch on iPads with keyboard)
+  /* ── iPad/Touch tablet: stacked panels, scroll switches active (exact Services pattern) ── */
+  if (isTablet) {
     document.documentElement.classList.add('proc-touch');
-
-    // Set first panel active immediately
     let currentProc = 0;
     panels[0].classList.add('proc-active');
 
@@ -1895,29 +1876,25 @@ if (!prefersReduced) {
     return;
   }
 
+  /* ── Desktop: CSS sticky wrapper, track translates horizontally ── */
   const totalScroll = (panels.length - 1) * window.innerWidth;
+  outer.style.height = `calc(100svh + ${totalScroll}px)`;
 
-  // Animate horizontal track — store reference for containerAnimation
-  const trackAnim = gsap.to(track, {
-    x: -totalScroll,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: wrapper,
-      pin: true,
-      pinType: 'transform',   // iOS Safari fix: use transform instead of position:fixed
-      scrub: 0.15,
-      end: () => `+=${totalScroll}`,
-      anticipatePin: 1,
-      snap: {
-        snapTo: 1 / (panels.length - 1),
-        duration: { min: 0.15, max: 0.35 },
-        delay: 0.05,
-        ease: 'power1.inOut',
-      },
-      onUpdate(self) {
-        if (progFill) progFill.style.width = `${self.progress * 100}%`;
-      },
-    }
+  ScrollTrigger.create({
+    trigger: outer,
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 0.15,
+    snap: {
+      snapTo: 1 / (panels.length - 1),
+      duration: { min: 0.15, max: 0.35 },
+      delay: 0.05,
+      ease: 'power1.inOut',
+    },
+    onUpdate(self) {
+      track.style.transform = `translateX(${-self.progress * totalScroll}px)`;
+      if (progFill) progFill.style.width = `${self.progress * 100}%`;
+    },
   });
 
 })();
