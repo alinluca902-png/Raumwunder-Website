@@ -1834,6 +1834,7 @@ if (!prefersReduced) {
     scrollTrigger: {
       trigger: wrapper,
       pin: true,
+      pinType: 'transform',   // iOS Safari fix: use transform instead of position:fixed
       scrub: 0.15,
       end: () => `+=${totalScroll}`,
       anticipatePin: 1,
