@@ -688,25 +688,43 @@
       .footer-links { justify-content: center; }
       .footer-social { justify-content: center; }
     }
-    /* Touch tablet (iPad): exact same pattern as Services — stacked panels, ScrollTrigger switch */
-    @media (hover: none) and (min-width: 768px) {
-      .process-outer { height: 400svh; position: relative; }
-      .process-wrapper { position: sticky; top: 0; height: 100svh; height: 100dvh; overflow: hidden; }
-      .process-panels-vp { flex: 1; position: relative; overflow: hidden; }
-      .process-track { display: block; width: 100%; height: 100%; position: relative; transform: none !important; }
-      .process-panel {
-        position: absolute; inset: 0; width: 100%;
-        opacity: 0;
-        transform: translateX(60px);
-        transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        pointer-events: none;
-        grid-template-columns: 1fr;
-        padding: 2rem 2.5rem;
-        justify-content: center;
-      }
-      .process-panel.proc-active { opacity: 1; transform: translateX(0); pointer-events: auto; }
-      .process-panel-right { display: flex; }
+    /* Touch tablet (iPad): class set by JS — stacked panels, ScrollTrigger switch (like Services) */
+    .proc-touch .process-outer { height: 400svh; position: relative; }
+    .proc-touch .process-wrapper {
+      position: sticky; top: 0;
+      height: 100svh; height: 100dvh;
+      overflow: hidden;
     }
+    .proc-touch .process-panels-vp {
+      flex: 1; min-height: 0;
+      position: relative; overflow: hidden;
+    }
+    .proc-touch .process-track {
+      display: block !important;
+      width: 100% !important;
+      height: 100%;
+      min-height: 100%;
+      position: relative;
+      transform: none !important;
+    }
+    .proc-touch .process-panel {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100% !important;
+      opacity: 0;
+      transform: translateX(60px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      grid-template-columns: 1fr !important;
+      padding: 2rem 2.5rem;
+      align-items: center;
+    }
+    .proc-touch .process-panel.proc-active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+    .proc-touch .process-panel-right { display: flex !important; }
     @media (max-width: 767px) {
       /* Process section mobile only: vertical layout */
       .process-wrapper { height: auto !important; overflow: visible !important; }
@@ -1831,7 +1849,7 @@ if (!prefersReduced) {
 
   const panels = track.querySelectorAll('.process-panel');
   const isMobile = window.innerWidth < 768;
-  const isTouch = window.matchMedia('(hover: none)').matches;
+  const isTouch = navigator.maxTouchPoints > 0 && window.innerWidth >= 768;
 
   if (isMobile || prefersReduced) {
     // On mobile phones: vertical layout, stagger reveal
@@ -1851,6 +1869,8 @@ if (!prefersReduced) {
     // iPad: exact same pattern as Services — stacked panels, ScrollTrigger switches active
     const outer = document.getElementById('processOuter');
     if (!outer) return;
+    // Drive CSS via class (avoids (hover:none) mismatch on iPads with keyboard)
+    document.documentElement.classList.add('proc-touch');
 
     // Set first panel active immediately
     let currentProc = 0;
@@ -2168,7 +2188,7 @@ window.addEventListener('load', () => {
 });
 
 // Lenis auf Touch-Geräten sanfter konfigurieren
-if (lenis && window.matchMedia('(hover: none)').matches) {
+if (lenis && navigator.maxTouchPoints > 0) {
   lenis.options.duration = 0.8;
 }
 </script>
