@@ -719,23 +719,7 @@
       .svc-images, .g-item img { transform: translateZ(0); }
       .process-track, .services-sticky { transform: translateZ(0); }
       * { -webkit-tap-highlight-color: transparent; }
-      /* Mobile Services cards */
-      .svc-mobile-card {
-        position: relative; min-height: 75svh; overflow: hidden;
-        display: flex; flex-direction: column; justify-content: flex-end;
-        border-bottom: 1px solid oklch(0.2 0.008 65 / 0.4);
-      }
-      .svc-mobile-bg { position: absolute; inset: 0; }
-      .svc-mobile-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-      .svc-mobile-ov {
-        position: absolute; inset: 0;
-        background: linear-gradient(to top, oklch(0.07 0.006 62/0.95) 0%, oklch(0.07 0.006 62/0.55) 50%, oklch(0.07 0.006 62/0.15) 100%);
-      }
-      .svc-mobile-card .svc-panel {
-        position: relative; z-index: 2;
-        opacity: 1 !important; transform: none !important; pointer-events: auto !important;
-        padding: 2rem 1.5rem 2.5rem; max-width: 100%;
-      }
+
       /* Process section mobile only: vertical layout */
       .process-wrapper { position: static !important; height: auto !important; overflow: visible !important; }
       .process-outer { position: static; }
@@ -1705,46 +1689,6 @@ if (!prefersReduced) {
 (function servicesShowcase() {
   const panels   = [0, 1, 2, 3];
   let current    = 0;
-
-  // On mobile: rebuild as stacked full-bleed cards (image + content overlay)
-  if (window.innerWidth < 768) {
-    const section  = document.querySelector('.services-section');
-    const sticky   = document.querySelector('.services-sticky');
-    const svcImgs  = document.querySelectorAll('.svc-img img');
-    const svcPanels = document.querySelectorAll('.svc-panel');
-    const svcNav   = document.querySelector('.svc-nav');
-    if (!section || !sticky) return;
-
-    // Build cards
-    const fragment = document.createDocumentFragment();
-    svcPanels.forEach((panel, i) => {
-      const card = document.createElement('div');
-      card.className = 'svc-mobile-card';
-      // Background image
-      if (svcImgs[i]) {
-        const bg = document.createElement('div');
-        bg.className = 'svc-mobile-bg';
-        const img = svcImgs[i].cloneNode(true);
-        bg.appendChild(img);
-        card.appendChild(bg);
-      }
-      // Gradient overlay
-      const ov = document.createElement('div');
-      ov.className = 'svc-mobile-ov';
-      card.appendChild(ov);
-      // Content
-      panel.removeAttribute('style');
-      panel.classList.add('active');
-      card.appendChild(panel);
-      fragment.appendChild(card);
-    });
-
-    sticky.style.display = 'none';
-    if (svcNav) svcNav.style.display = 'none';
-    section.style.height = 'auto';
-    section.appendChild(fragment);
-    return;
-  }
 
   function activate(idx) {
     if (idx === current) return;
