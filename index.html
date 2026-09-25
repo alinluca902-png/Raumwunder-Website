@@ -714,8 +714,10 @@
     }
     .proc-touch .process-panel-right { display: flex !important; }
     @media (max-width: 767px) {
-      /* Mobile performance: GPU layers for smooth scroll */
-      .hero-bg, .svc-images, .g-item img { will-change: auto; transform: translateZ(0); }
+      /* Mobile performance: GPU composite layers */
+      .hero-bg { will-change: transform; transform: translateZ(0); backface-visibility: hidden; }
+      .svc-images, .g-item img { transform: translateZ(0); }
+      .process-track, .services-sticky { transform: translateZ(0); }
       * { -webkit-tap-highlight-color: transparent; }
       /* Mobile Services cards */
       .svc-mobile-card {
@@ -1579,16 +1581,16 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 ============================================================ */
 let lenis;
 if (!prefersReduced) {
-  // On mobile phones, skip Lenis — native scroll is smoother on touch
-  if (window.innerWidth < 768) { lenis = null; } else {
+  const isMobile = window.innerWidth < 768;
   window.lenis = lenis = new Lenis({
-    duration: 1.25,
+    duration: isMobile ? 0.9 : 1.25,
     easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     smoothWheel: true,
-  }); }
+    smoothTouch: false,   // native touch scroll (avoids iOS jank)
+    touchMultiplier: 2,
+  });
   lenis.on('scroll', ScrollTrigger.update);
-  // Also update ScrollTrigger on native scroll (for iOS touch)
   window.addEventListener('scroll', ScrollTrigger.update, { passive: true });
 
   // Smooth anchor navigation via Lenis
@@ -1602,10 +1604,8 @@ if (!prefersReduced) {
       lenis.scrollTo(target, { offset: -80, duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
     });
   });
-  if (lenis) {
-    gsap.ticker.add(time => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
-  }
+  gsap.ticker.add(time => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
 }
 
 /* ============================================================
@@ -1680,15 +1680,16 @@ mobMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob)
 /* ============================================================
    HERO PARALLAX
 ============================================================ */
-if (!prefersReduced && window.innerWidth >= 768) {
+if (!prefersReduced) {
+  const isMob = window.innerWidth < 768;
   gsap.to('#heroBg', {
-    yPercent: 28,
+    yPercent: isMob ? 14 : 28,
     ease: 'none',
     scrollTrigger: {
       trigger: '.hero',
       start: 'top top',
       end: 'bottom top',
-      scrub: true,
+      scrub: isMob ? 0.5 : true,
     }
   });
 }
@@ -1825,29 +1826,20 @@ if (!prefersReduced && window.innerWidth >= 768) {
     return;
   }
 
-  if (window.innerWidth < 768) {
-    // Mobile: simple fade-in instead of scrub (scrub causes scroll jank on touch)
-    gsap.fromTo('.w',
-      { opacity: 0 },
-      { opacity: 1, stagger: 0.04, duration: 0.4, ease: 'power2.out',
-        scrollTrigger: { trigger: '#textScrub', start: 'top 80%', once: true } }
-    );
-  } else {
-    gsap.fromTo('.w',
-      { opacity: 0.08 },
-      {
-        opacity: 1,
-        stagger: { each: 0.10, ease: 'none' },
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#textScrub',
-          start: 'top 90%',
-          end: 'bottom 88%',
-          scrub: 0.3,
-        }
+  gsap.fromTo('.w',
+    { opacity: 0.08 },
+    {
+      opacity: 1,
+      stagger: { each: 0.10, ease: 'none' },
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#textScrub',
+        start: 'top 90%',
+        end: 'bottom 88%',
+        scrub: 0.3,
       }
-    );
-  }
+    }
+  );
 })();
 
 /* ============================================================
