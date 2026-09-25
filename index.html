@@ -714,6 +714,9 @@
     }
     .proc-touch .process-panel-right { display: flex !important; }
     @media (max-width: 767px) {
+      /* Mobile performance: GPU layers for smooth scroll */
+      .hero-bg, .svc-images, .g-item img { will-change: auto; transform: translateZ(0); }
+      * { -webkit-tap-highlight-color: transparent; }
       /* Process section mobile only: vertical layout */
       .process-wrapper { position: static !important; height: auto !important; overflow: visible !important; }
       .process-outer { position: static; }
@@ -1407,7 +1410,7 @@
   <div class="cta-inner c">
     <h2 class="cta-heading">
       Bereit für Ihren<br>
-      <em>fugenlosen <span style="color:#fff;">T</span>Raum?</em>
+      <em>fugenlosen Raum?</em>
     </h2>
     <p class="cta-sub">
       Kostenlose Beratung vor Ort – deutschlandweit.
@@ -1559,12 +1562,14 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 ============================================================ */
 let lenis;
 if (!prefersReduced) {
+  // On mobile phones, skip Lenis — native scroll is smoother on touch
+  if (window.innerWidth < 768) { lenis = null; } else {
   window.lenis = lenis = new Lenis({
     duration: 1.25,
     easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     orientation: 'vertical',
     smoothWheel: true,
-  });
+  }); }
   lenis.on('scroll', ScrollTrigger.update);
   // Also update ScrollTrigger on native scroll (for iOS touch)
   window.addEventListener('scroll', ScrollTrigger.update, { passive: true });
@@ -1580,8 +1585,10 @@ if (!prefersReduced) {
       lenis.scrollTo(target, { offset: -80, duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
     });
   });
-  gsap.ticker.add(time => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
+  if (lenis) {
+    gsap.ticker.add(time => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
 }
 
 /* ============================================================
@@ -1656,7 +1663,7 @@ mobMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob)
 /* ============================================================
    HERO PARALLAX
 ============================================================ */
-if (!prefersReduced) {
+if (!prefersReduced && window.innerWidth >= 768) {
   gsap.to('#heroBg', {
     yPercent: 28,
     ease: 'none',
@@ -1680,6 +1687,22 @@ if (!prefersReduced) {
 (function servicesShowcase() {
   const panels   = [0, 1, 2, 3];
   let current    = 0;
+
+  // On mobile, just show all panels statically — no sticky scroll overhead
+  if (window.innerWidth < 768) {
+    document.querySelectorAll('.svc-img, .svc-panel').forEach((el, i) => {
+      if (i === 0 || el.classList.contains('svc-panel')) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        el.style.position = 'relative';
+        el.style.pointerEvents = 'auto';
+      }
+    });
+    document.querySelectorAll('.svc-img').forEach((el, i) => {
+      el.style.opacity = i === 0 ? '1' : '0';
+    });
+    return;
+  }
 
   function activate(idx) {
     if (idx === current) return;
@@ -1761,20 +1784,29 @@ if (!prefersReduced) {
     return;
   }
 
-  gsap.fromTo('.w',
-    { opacity: 0.08 },
-    {
-      opacity: 1,
-      stagger: { each: 0.10, ease: 'none' },
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#textScrub',
-        start: 'top 90%',
-        end: 'bottom 88%',
-        scrub: 0.3,
+  if (window.innerWidth < 768) {
+    // Mobile: simple fade-in instead of scrub (scrub causes scroll jank on touch)
+    gsap.fromTo('.w',
+      { opacity: 0 },
+      { opacity: 1, stagger: 0.04, duration: 0.4, ease: 'power2.out',
+        scrollTrigger: { trigger: '#textScrub', start: 'top 80%', once: true } }
+    );
+  } else {
+    gsap.fromTo('.w',
+      { opacity: 0.08 },
+      {
+        opacity: 1,
+        stagger: { each: 0.10, ease: 'none' },
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '#textScrub',
+          start: 'top 90%',
+          end: 'bottom 88%',
+          scrub: 0.3,
+        }
       }
-    }
-  );
+    );
+  }
 })();
 
 /* ============================================================
